@@ -1,16 +1,16 @@
 CC=gcc
 CFLAGS=-W -Wall -ansi -pedantic
 LDFLAGS=
-EXEC=zepplin
+EXEC=zeppelin
 SRC= $(wildcard *.c)
 OBJ= $(SRC:.c=.o)
 
 all: $(EXEC)
 
-zepplin: $(OBJ)
+zeppelin: $(OBJ)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
-zepplin.o: zepplin.h
+zeppelin.o: zeppelin.h
 
 %.o: %.c
 	$(CC) -o $@ -c $< $(CFLAGS)
