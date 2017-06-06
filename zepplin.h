@@ -3,8 +3,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#define PARTAGECOLIS /colis
-#define PARTAGECLIENT /client
+#define NBCOLIS 50
+#define NBCLIENT 40
 
 struct Client{
 	int id;
@@ -19,3 +19,10 @@ struct Colis{
 
 typedef struct Client Client;
 typedef struct Colis Colis;
+
+struct data{
+	Colis colis[NBCOLIS];
+	Client clients[NBCLIENT];
+};
+
+typedef struct data data;
