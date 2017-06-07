@@ -4,12 +4,17 @@
 #define NBCOLIS 10 /*nb colis par categorie*/
 #define NBCLIENT 40
 
+#include <pthread.h>
+
 typedef struct Client{
 	int id;
 	int couloir;
 	int dist;
 	int present;
 	int nbColis;
+	int dronePresent;
+	pthread_mutex_t mutex_client;
+	pthread_cond_t cond_client;
 } Client;
 
 typedef struct Colis{
@@ -26,7 +31,7 @@ typedef struct Data{
 } Data;
 
 typedef struct Drone{
-	int id;//inutile
+	int id;/*inutile*/
 	int capaciteActuel;
 	int poidsMaximum
 } Drone;

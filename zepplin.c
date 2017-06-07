@@ -3,24 +3,39 @@
 int main(){
 	Data data = initData();
 	pthread_t drones[NBDRONE], clients[NBCLIENT];
-	int i;
+	int i, id;
 
 	/*affData (data);*/
 	
-	for (i=0; i < NBDRONE; i++)
+	/*for (i=0; i < NBDRONE; i++)
 	{
 		pthread_create (&drones[i], NULL, droneThread, &data);
-	}
+	}*/
 	
 	for (i=0; i < NBCLIENT; i++)
 	{
 		pthread_create (&clients[i], NULL, clientThread, &data.clients[i]);
 	}
+
+	for (i=0; i < NBCOLIS; i++)
+	{
+		/*sleep(1);*/
+		id = data.leger[i].idClient;
+		livreColis(&data.clients[id]);
+
+		/*sleep(1);*/
+		id = data.moyen[i].idClient;
+		livreColis(&data.clients[id]);
+
+		/*sleep(1);*/
+		id = data.lourd[i].idClient;
+		livreColis(&data.clients[id]);
+	}
 	
-	for (i=0; i < NBDRONE; i++)
+	/*for (i=0; i < NBDRONE; i++)
 	{
 		pthread_join (drones[i], NULL);
-	}
+	}*/
 
 	for (i=0; i < NBCLIENT; i++)
 	{
@@ -28,6 +43,29 @@ int main(){
 	}
 	
 	return 0;
+}
+
+void livreColis (Client *c) /*marche pas :( -> interblocage si client pas là*/
+{
+	do
+	{
+		pthread_mutex_lock (&c->mutex_client);
+		if (c->present)
+		{
+			c->nbColis--;
+			printf("Colis livre pour le client %d\n", c->id);
+		}
+		else
+		{
+			printf("Le client %d pas la\n", c->id);
+			pthread_mutex_unlock(&c->mutex_client);
+			pthread_cond_signal (&c->cond_client);
+			sleep(1);
+			pthread_mutex_lock (&c->mutex_client);
+		}
+	}while (!c->present);
+	pthread_mutex_unlock(&c->mutex_client);
+	pthread_cond_signal (&c->cond_client);
 }
 
 Data initData()
@@ -44,6 +82,9 @@ Data initData()
 		d.clients[i].dist = rand_min_max(2,31);
 		d.clients[i].present = rand_min_max(0,11);
 		d.clients[i].nbColis = 0;
+		d.clients[i].dronePresent = 0;
+		d.clients[i].mutex_client = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
+		d.clients[i].cond_client = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
 	}
 	
 	for (i=0; i < NBCOLIS; i++)

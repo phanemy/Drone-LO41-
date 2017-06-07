@@ -14,5 +14,6 @@
 #define NBDRONE 10
 
 Data initData ();
+void livreColis (Client *c);
 
 #endif // ZEPPZLIN_H_INCLUDED
