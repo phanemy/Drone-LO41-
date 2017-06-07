@@ -3,13 +3,9 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include "structures.h"
 #define CapaciteBattery 90
 
-typedef struct Drone{
-	int id;
-	int capaciteActuel;
-	int poidsMaximum
-};
 
 void *droneThread(void *data);
 

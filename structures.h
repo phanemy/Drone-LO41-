@@ -23,4 +23,9 @@ typedef struct Data{
 	Client clients[NBCLIENT];
 } Data;
 
+typedef struct Drone{
+	int id;
+	int capaciteActuel;
+	int poidsMaximum
+} Drone;
 #endif // STRUCTURES_H_INCLUDED
