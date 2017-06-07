@@ -33,7 +33,7 @@ int main(){
 Data initData()
 {
 	Data d;
-	int i;
+	int i, id;
 
 	srand(time(NULL));
 
@@ -43,15 +43,24 @@ Data initData()
 		d.clients[i].couloir = rand_min_max(0,5);
 		d.clients[i].dist = rand_min_max(2,31);
 		d.clients[i].present = rand_min_max(0,11);
+		d.clients[i].nbColis = 0;
 	}
 	
 	for (i=0; i < NBCOLIS; i++)
-	{	/*0<leger<2<3<moyen<5<6<lourd*/
-		d.leger[i].idClient = rand_min_max(0,NBCLIENT);
+	{
+		id = rand_min_max(0,NBCLIENT);
+		d.leger[i].idClient = id;
+		d.clients[id].nbColis++;
 		d.leger[i].poids = rand_min_max(0,3);
-		d.moyen[i].idClient = rand_min_max(0,NBCLIENT);
+		
+		id = rand_min_max(0,NBCLIENT);
+		d.moyen[i].idClient = id;
+		d.clients[id].nbColis++;
 		d.moyen[i].poids = rand_min_max(2,6);
-		d.lourd[i].idClient = rand_min_max(0,NBCLIENT);
+
+		id = rand_min_max(0,NBCLIENT);
+		d.lourd[i].idClient = id;
+		d.clients[id].nbColis++;
 		d.lourd[i].poids = rand_min_max(5,11);
 	}
 	return d;

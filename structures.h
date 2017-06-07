@@ -9,6 +9,7 @@ typedef struct Client{
 	int couloir;
 	int dist;
 	int present;
+	int nbColis;
 } Client;
 
 typedef struct Colis{
@@ -29,4 +30,5 @@ typedef struct Drone{
 	int capaciteActuel;
 	int poidsMaximum
 } Drone;
+
 #endif // STRUCTURES_H_INCLUDED
