@@ -1,29 +1,30 @@
 #include "drone.h"
 
 
-void droneThread()
+void *droneThread(void *data)
 {
-	
+	printf("Threadid : %ld\n", pthread_self());
+	return NULL;
 }
 
 void rechercheColis()
 {
-	//moniteur?
-	//verif colis de poids voulu dispo et doc de livraison libre
+	/*moniteur?
+	verif colis de poids voulu dispo et doc de livraison libre*/
 }
 
 void recharge()
 {
-	//si(nbZoneRechargeLibre == 0)	
-	//	zoneRechargeCond.wait
-	//Fsi
-	//
-	//nbZoneRechargeLibre --
-	//int tempRecharge = (CapaciteBattery -capaciteActuel)/1.5
-	//Comment mettre en pause pour une durée un trhead? car sleep endort tt le processus et ces thread :/
-	// capaciteActuel = 90;	
-	//nbZoneRechargeLibre ++
-	//zoneRechargeCond.signal
+	/*si(nbZoneRechargeLibre == 0)	
+		zoneRechargeCond.wait
+	Fsi
+	
+	nbZoneRechargeLibre --
+	int tempRecharge = (CapaciteBattery -capaciteActuel)/1.5
+	Comment mettre en pause pour une durée un trhead? car sleep endort tt le processus et ces thread :/
+	 capaciteActuel = 90;	
+	nbZoneRechargeLibre ++
+	zoneRechargeCond.signal*/
 	
 }
 

@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-W -Wall -ansi -pedantic
-LDFLAGS=
+LDFLAGS=-lpthread
 EXEC=zeppelin
 SRC= $(wildcard *.c)
 OBJ= $(SRC:.c=.o)
