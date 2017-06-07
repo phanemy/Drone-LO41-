@@ -21,6 +21,7 @@ typedef struct Client Client;
 typedef struct Colis Colis;
 
 struct data{
+	//creer 4 tableaux de colis. 1 par categorie de poids et reparti sur les doc d'appro, 1 ou plusieur docs / categorie de poids
 	Colis colis[NBCOLIS];
 	Client clients[NBCLIENT];
 };

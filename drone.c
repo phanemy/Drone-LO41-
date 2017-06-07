@@ -1,13 +1,33 @@
 #include "drone.h"
-#define CapaciteBattery 90
-typedef struc Drone Drone;
-struct Drone{
-	int id;
-	int capaciteActuel;
-	int poidsMaximum
-};
 
-int droneThread()
+
+void droneThread()
+{
+	
+}
+
+void rechercheColis()
+{
+	//moniteur?
+	//verif colis de poids voulu dispo et doc de livraison libre
+}
+
+void recharge()
+{
+	//si(nbZoneRechargeLibre == 0)	
+	//	zoneRechargeCond.wait
+	//Fsi
+	//
+	//nbZoneRechargeLibre --
+	//int tempRecharge = (CapaciteBattery -capaciteActuel)/1.5
+	//Comment mettre en pause pour une durée un trhead? car sleep endort tt le processus et ces thread :/
+	// capaciteActuel = 90;	
+	//nbZoneRechargeLibre ++
+	//zoneRechargeCond.signal
+	
+}
+
+void livre()
 {
 	
 }
