@@ -14,6 +14,7 @@ typedef struct Client{
 typedef struct Colis{
 	int idClient;
 	int poids;
+	int livrer;/*0 pour non, -1 pour en cours, 1 pour livrer*/
 } Colis;
 
 typedef struct Data{
@@ -24,7 +25,7 @@ typedef struct Data{
 } Data;
 
 typedef struct Drone{
-	int id;
+	int id;//inutile
 	int capaciteActuel;
 	int poidsMaximum
 } Drone;

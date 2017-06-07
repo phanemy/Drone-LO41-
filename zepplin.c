@@ -46,7 +46,7 @@ Data initData()
 	}
 	
 	for (i=0; i < NBCOLIS; i++)
-	{
+	{	/*0<leger<2<3<moyen<5<6<lourd*/
 		d.leger[i].idClient = rand_min_max(0,NBCLIENT);
 		d.leger[i].poids = rand_min_max(0,3);
 		d.moyen[i].idClient = rand_min_max(0,NBCLIENT);

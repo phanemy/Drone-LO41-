@@ -4,13 +4,35 @@
 void *droneThread(void *data)
 {
 	printf("Threadid : %ld\n", pthread_self());
-	return NULL;
+	/*srand(time(NULL));
+	Drone* drone = (Drone*) malloc(sizeof(Drone));
+	drone.capaciteActuel = 90;
+	drone.poidsMaximum = rand_min_max(0,3);
+	//si 0 => leger, 1 => moyen, 2 => lourd
+	*/return NULL;
 }
 
 void rechercheColis()
 {
 	/*moniteur?
 	verif colis de poids voulu dispo et doc de livraison libre*/
+}
+
+void/*int*/ prendreColis(Colis colis)
+{
+	/*int tempsD = CouloirX.distance * 0.5;
+	int tempsRMax = CouloirX.distance * 1.5; 
+	int temps = tempsD + tempsRMax;
+	if(temps>CapaciteActuel)
+	{
+		return 0;
+	}
+	else
+	{	
+		colis.livrer = -1;
+		return 1;
+	}
+	*/
 }
 
 void recharge()
@@ -21,7 +43,7 @@ void recharge()
 	
 	nbZoneRechargeLibre --
 	int tempRecharge = (CapaciteBattery -capaciteActuel)/1.5
-	Comment mettre en pause pour une durée un trhead? car sleep endort tt le processus et ces thread :/
+	sleep(tempRecharge);
 	 capaciteActuel = 90;	
 	nbZoneRechargeLibre ++
 	zoneRechargeCond.signal*/
@@ -30,5 +52,33 @@ void recharge()
 
 void livre()
 {
-	
+	/*
+	On a deja le colis et verifier quon avais la battery
+	si(CouloirX.descente == 0)
+	{
+		CouloirXDescente.wait;
+	}
+	CouloirXDescente --;
+	int temps = CouloirX.distance * 0.5;
+	sleep(temps);
+	capacitéActuel = capaciteActuel - temps;
+	if(clientX.present)
+	{
+		colisX.livrer=vrai;	
+		temps = CouloirX.distance * 1; 
+	}			
+	else
+	{
+		temps = CouloirX.distance * 1.5; 
+	}
+	si(CouloirX.monte == 0)
+	{
+		CouloirXMonte.wait;
+	}
+	CouloirXDescente ++;
+	COuloirXMOnte --;
+	sleep(temps)
+	CouloirXmonte ++
+	capacitéActuel = capaciteActuel - temps;
+	*/
 }
