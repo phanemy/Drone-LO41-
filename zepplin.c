@@ -5,12 +5,12 @@ int main(){
 	pthread_t drones[NBDRONE], clients[NBCLIENT];
 	int i, id;
 
-	/*affData (data);*/
+	affData(data);
 	
-	for (i=0; i < NBDRONE; i++)
+	/*for (i=0; i < NBDRONE; i++)
 	{
 		pthread_create (&drones[i], NULL, droneThread, &data);
-	}
+	}*/
 	/*
 	for (i=0; i < NBCLIENT; i++)
 	{
@@ -32,16 +32,19 @@ int main(){
 		livreColis(&data.clients[id]);
 	}*/
 	
-	for (i=0; i < NBDRONE; i++)
+	/*for (i=0; i < NBDRONE; i++)
 	{
 		pthread_join (drones[i], NULL);
-	}
+	}*/
 /*
 	for (i=0; i < NBCLIENT; i++)
 	{
 		pthread_join (clients[i], NULL);
 	}
 	*/
+
+	destroyTout(&data);
+
 	return 0;
 }
 
@@ -93,15 +96,73 @@ Data initData()
 		d.colis[i].poids = rand_min_max(0,11);
 		d.colis[i].livrer = 0;
 	}
+
+	triColis(&d);
+
+	int premierApa = d.colis[0].poids, fin = 0;
+	i = 1;
 	
-	d.nbColis = NBCOLIS;
+	d.idMoyen = 0;
+	d.idLourd = 0;
+
+	while (fin < 2 && i < NBCOLIS)
+	{
+		if (d.colis[i].poids != premierApa)
+		{
+			premierApa = d.colis[i].poids;
+			if (premierApa == TAILLELEGERCOLIS)
+			{
+				d.idMoyen = i;
+				fin++;
+			}
+			else if (premierApa == TAILLEMOYENCOLIS)
+			{
+				d.idLourd = i;
+				fin++;
+			}
+		}
+		i++;
+	}
+	if (i == NBCOLIS && d.idMoyen == 0)
+		d.idMoyen = NBCOLIS;
+	if (i == NBCOLIS && d.idLourd == 0)
+		d.idLourd = NBCOLIS;
+
 	d.mutex_docs = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
-	cond_docs = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
+	d.cond_docs = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
 
 	return d;
 }
 
+void destroyTout (Data *d)
+{
+	int i;
+
+	for (i=0; i < NBCLIENT; i++)
+	{
+		pthread_mutex_destroy(&d->clients[i].mutex_client);
+	}
+	pthread_mutex_destroy(&d->mutex_docs);
+	pthread_cond_destroy(&d->cond_docs);
+}
+
 void triColis (Data *d)
 {
-	
+	int i, j, changement;
+	Colis temps;
+	do
+	{
+		changement = 0;
+		for (j=0; j < NBCOLIS - i - 1; j++)
+		{
+			if (d->colis[j].poids > d->colis[j+1].poids)
+			{
+				changement = 1;
+				temps = d->colis[j];
+				d->colis[j] = d->colis[j+1];
+				d->colis[j+1] = temps;
+			}
+		}
+		i++;
+	}while (changement && i < NBCOLIS);
 }

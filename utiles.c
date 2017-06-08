@@ -9,26 +9,14 @@ void affData (Data d)
 		affClient(d.clients[i]);
 	}
 	
-	printf("\nColis leger\n");
-	
+	printf("\nColis\n");
 	for (i=0; i < NBCOLIS; i++)
 	{
-		affColis(d.leger[i]);
+		affColis(d.colis[i]);
 	}
 
-	printf("\nColis moyen\n");
-	
-	for (i=0; i < NBCOLIS; i++)
-	{
-		affColis(d.moyen[i]);
-	}
-
-	printf("\nColis lourd\n");
-	
-	for (i=0; i < NBCOLIS; i++)
-	{
-		affColis(d.lourd[i]);
-	}
+	printf("\nIendex\n");
+	printf("idMoyen : %d\nidLourd : %d\n", d.idMoyen, d.idLourd);
 }
 
 void affClient (Client c)

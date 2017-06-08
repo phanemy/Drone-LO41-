@@ -15,5 +15,7 @@
 
 Data initData ();
 void livreColis (Client *c);
+void destroyTout (Data *d);
+void triColis (Data *d);
 
 #endif // ZEPPZLIN_H_INCLUDED

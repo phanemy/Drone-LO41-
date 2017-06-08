@@ -5,6 +5,9 @@
 #define NBCLIENT 40
 #define NBDOCS 4
 
+#define TAILLELEGERCOLIS 3
+#define TAILLEMOYENCOLIS 6
+
 #include <pthread.h>
 
 typedef struct Client{
