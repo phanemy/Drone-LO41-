@@ -150,7 +150,8 @@ void livreColis(Data* data, int i,Drone* drone)
 		client->couloir[0] = 1;/* on descend*/
 		temps = client->dist *  0.5;
 	pthread_mutex_unlock(&client->mutex_client);
-
+	
+	yellow("Dodo\n");
 	sleep(1);
 	/*sleep(temps);*/
 	drone->capaciteActuel = drone->capaciteActuel - temps;
@@ -162,11 +163,11 @@ void livreColis(Data* data, int i,Drone* drone)
 	int donne = donneColis(client);
 	printf("donne = %d\n",donne);
 	if(donne)
-	{	
+	{
 
 		data->colis[i].livrer = 1;	
-		pthread_mutex_lock(&client->mutex_client);
-			temps = client->dist * 1; 
+		pthread_mutex_lock(&client->mutex_client);	
+			temps = client->dist * 1;
 		pthread_mutex_unlock(&client->mutex_client);
 
 	}
@@ -178,11 +179,11 @@ void livreColis(Data* data, int i,Drone* drone)
 	}
 	
 	pthread_mutex_lock(&client->mutex_client);
-		if(client->couloir[2] == 1)
+		if(client->couloir[1] == 1)
 		{
 			pthread_cond_wait(&client->cond_client,&client->mutex_client);
 		}
-		client->couloir[2] = 1;/* on descend*/
+		client->couloir[1] = 1;/* on descend*/
 	pthread_mutex_unlock(&client->mutex_client);
 	sleep(1);
 	/*sleep(temps);*/
@@ -211,6 +212,7 @@ int donneColis(Client *c)
 	printf("donneColis\n");
 	int colisLivre = 0;
 	int i = 0;
+	char chaine[50];
 	while(!colisLivre && i<5)
 	{
 		pthread_mutex_lock (&c->mutex_client);
@@ -218,11 +220,11 @@ int donneColis(Client *c)
 		{
 			c->nbColis--;
 			colisLivre = 1;
-			printf("Colis livre pour le client %d\n", c->id);
+			sprintf(chaine, "Colis livre pour le client %d\n", c->id);
+			blue(chaine);
 		}
 		else
 		{
-			char chaine[50];
 			sprintf(chaine, "Le client %d pas la\n", c->id);
 			red(chaine);
 			pthread_mutex_unlock(&c->mutex_client);
@@ -232,11 +234,11 @@ int donneColis(Client *c)
 		i++;
 	}
 	if(i == 5)
-	{printf("donneCOlis fin\n------------------\n");
+	{printf("donneColis fin\n------------------\n");
 		return 0;
 	}
 	else
-	{printf("donneCOlis fin\n------------------\n");
+	{printf("donneColis fin\n------------------\n");
 		return 1;
 	}
 

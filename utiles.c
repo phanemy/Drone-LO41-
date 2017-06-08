@@ -22,7 +22,7 @@ void affData (Data d)
 void affClient (Client c)
 {
 	char chaine[100];
-	sprintf(chaine, "id : %d, couloir : %d, dist : %d, nbColis : %d, present : ", c.id, c.couloir, c.dist, c.nbColis);
+	sprintf(chaine, "id : %d, couloir1 : %d, couloir2 : %d, dist : %d, nbColis : %d, present : ", c.id, c.couloir[0], c.couloir[1], c.dist, c.nbColis);
 	if (c.present)
 		strcat(chaine, "OUI\n");
 	else
