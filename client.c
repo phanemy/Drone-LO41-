@@ -3,8 +3,11 @@
 void *clientThread(void *data)
 {
 	Client *c = (Client*) data;
+		
 	gestionClient(c);
 	printf("Le client %d a recu tout ses colis\n", c->id);
+	
+	
 	return NULL;
 }
 

@@ -11,7 +11,8 @@
 #include "client.h"
 #include "structures.h"
 #include "utiles.h"
-#define NBDRONE 10
+
+#define NBDRONE 1
 
 Data initData ();
 void livreColis (Client *c);

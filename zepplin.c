@@ -6,18 +6,21 @@ int main(){
 	int i, id;
 
 	affData(data);
-	
-	/*for (i=0; i < NBDRONE; i++)
-	{
-		pthread_create (&drones[i], NULL, droneThread, &data);
-	}*/
-	/*
 	for (i=0; i < NBCLIENT; i++)
-	{
+	{	
+		printf("creation client n°%d",i);
 		pthread_create (&clients[i], NULL, clientThread, &data.clients[i]);
 	}
 
-	for (i=0; i < NBCOLIS; i++)
+	for (i=0; i < NBDRONE; i++)
+	{	
+		printf("\ncreation drone n°%d\n\n",i);
+		pthread_create (&drones[i], NULL, droneThread, &data);
+	}
+	
+	
+
+	/*for (i=0; i < NBCOLIS; i++)
 	{
 		sleep(1);
 		id = data.leger[i].idClient;
@@ -32,17 +35,15 @@ int main(){
 		livreColis(&data.clients[id]);
 	}*/
 	
-	/*for (i=0; i < NBDRONE; i++)
+	for (i=0; i < NBDRONE; i++)
 	{
 		pthread_join (drones[i], NULL);
-	}*/
-/*
+	}
 	for (i=0; i < NBCLIENT; i++)
 	{
 		pthread_join (clients[i], NULL);
 	}
-	*/
-
+	
 	destroyTout(&data);
 
 	return 0;
@@ -74,7 +75,7 @@ Data initData()
 		id = rand_min_max(0,NBCLIENT);
 		d.clients[id].nbColis++;
 		d.colis[i].idClient = id;
-		d.colis[i].poids = rand_min_max(0,11);
+		d.colis[i].poids = 0;/*rand_min_max(0,11);*/
 		d.colis[i].livrer = 0;
 	}
 

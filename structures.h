@@ -1,8 +1,8 @@
 #ifndef STRUCTURES_H_INCLUDED
 #define STRUCTURES_H_INCLUDED
 
-#define NBCOLIS 40
-#define NBCLIENT 40
+#define NBCOLIS 4
+#define NBCLIENT 2
 #define NBDOCS 4
 #define NBSLOTS 10
 
