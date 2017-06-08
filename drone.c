@@ -19,7 +19,7 @@ void *droneThread(void *data)
 
 /* fonction qui decremente le poids focus par le drone si son ancien et totalement livrer.*/
 
-int toutFini(Date* data)
+int toutFini(Data* data)
 {
 	int i=0,bool=1;
 	
