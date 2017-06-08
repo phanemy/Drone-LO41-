@@ -8,7 +8,7 @@ void *droneThread(void *data)
 	Drone *drone;
 	drone->capaciteActuel = 90;
 	drone->poidsMaximum = rand_min_max(0,3);
-	/*µprintf("capa = %d, poid = %d, thread = %ld\n",drone->capaciteActuel,drone->poidsMaximum, pthread_self());
+	/*printf("capa = %d, poids = %d, thread = %ld\n",drone->capaciteActuel,drone->poidsMaximum, pthread_self());
 	si 0 => leger, 1 => moyen, 2 => lourd*/
 	return NULL;
 }
@@ -138,23 +138,82 @@ void/*int*/ prendreColis(Data *data, Drone *d)
 	}*/
 }
 
-void recharge()
+void recharge(Data* data,Drone* drone)
 {
-	/*si(nbZoneRechargeLibre == 0)	
-		zoneRechargeCond.wait
-	Fsi
+	pthread_mutex_lock(&mutex_slotsRecharge);
 	
-	nbZoneRechargeLibre --
-	int tempRecharge = (CapaciteBattery -capaciteActuel)/1.5
-	sleep(tempRecharge);
-	 capaciteActuel = 90;	
-	nbZoneRechargeLibre ++
-	zoneRechargeCond.signal*/
+		if(data->nbSLotsRecharge == 0)	
+		{	
+			pthread_cond_wait(&cond_slotRecharge,&mutex_slotRecharge);
+		}
+		data->nbSLotsRecharge--;	
+	pthread_mutex_unlock(&mutex_slotsRecharge);	
 	
+		printf("le drone %ld se recharge\n",phtread_self());
+		int tempRecharge = (CAPACITEBATTERY - drone->capaciteActuel)/1.5;
+		sleep(tempRecharge);
+		drone->capaciteActuel = 90;
+		printf("le drone %ld a fini de se recharge\n",phtread_self());
+
+	pthread_mutex_lock(&mutex_slotsRecharge);
+		data->nbSLotsRecharge++;
+		pthread_cond_signal(&cond_slotRecharge);
+	pthread_mutex_unlock(&mutex_slotsRecharge);
 }
 
-void livre()
+
+void livreColis(Data* data, int i,Drone* drone)
 {
+	Client* client = data->clients[data->colis[i].idClient];
+	int temps;
+	pthread_mutex_lock(&mutex_client);
+		if(client->couloir[0] == 1)
+		{
+			pthread_cond_wait(&cond_client,&mutex_client);
+		}
+		client->couloir[0] = 1;/* on descend*/
+		temps = client->dist *  0.5;
+	pthread_mutex_unlock(&mutex_client);
+
+	sleep(temps);
+	drone->capaciteActuel = drone->capaciteActuel - temps;
+	
+	pthread_mutex_lock(&mutex_client);
+		client->couloir[0]=0;
+		pthread_cond_signal(&cond_client);
+	pthread_mutex_unlock(&mutex_client);
+	
+	if(donneColis(client))
+	{
+		data->colis[i].livrer = 1;	
+		pthread_mutex_lock(&mutex_client);
+			temps = client->dist * 1; 
+		pthread_mutex_unlock(&mutex_client);
+	}
+	else
+	{	
+		pthread_mutex_lock(&mutex_client);
+			temps = client->dist * 1.5; 
+		pthread_mutex_lock(&mutex_client);
+	}
+
+	pthread_mutex_lock(&mutex_client);
+		if(client->couloir[2] == 1)
+		{
+			pthread_cond_wait(&cond_client,&mutex_client);
+		}
+		client->couloir[2] = 1;/* on descend*/
+	pthread_mutex_unlock(&mutex_client);
+
+	sleep(temps);
+	drone->capaciteActuel = drone->capaciteActuel - temps;
+
+
+	pthread_mutex_lock(&mutex_client);
+		client->couloir[1]=0;
+		pthread_cond_signal(&cond_client);
+	pthread_mutex_unlock(&mutex_client);
+
 	/*
 	On a deja le colis et verifier quon avais la battery
 	si(CouloirX.descente == 0)
@@ -184,7 +243,41 @@ void livre()
 	CouloirXmonte ++
 	capacitéActuel = capaciteActuel - temps;
 	*/
+
+
 }
+
+int donneColis(Client *c)
+{
+	int colisLivre = 0;
+	int i = 0;
+	while(!colisLivre || i<5)
+	{
+		pthread_mutex_lock (&c->mutex_client);
+		if (c->present)
+		{
+			c->nbColis--;
+			colisLivre = 1;
+			printf("Colis livre pour le client %d\n", c->id);
+		}
+		else
+		{
+			printf("Le client %d pas la\n", c->id);
+			pthread_mutex_unlock(&c->mutex_client);
+			sleep(1);
+		}
+		pthread_mutex_unlock(&c->mutex_client);
+	}
+	if(i == 5)
+	{
+		return 0;
+	}
+	else
+	{
+		return 1;
+	}
+}
+
 
 
 

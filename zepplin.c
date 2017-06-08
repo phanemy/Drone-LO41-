@@ -48,27 +48,6 @@ int main(){
 	return 0;
 }
 
-void livreColis (Client *c)
-{
-	int colisLivre = 0;
-	while(!colisLivre)
-	{
-		pthread_mutex_lock (&c->mutex_client);
-		if (c->present)
-		{
-			c->nbColis--;
-			colisLivre = 1;
-			printf("Colis livre pour le client %d\n", c->id);
-		}
-		else
-		{
-			printf("Le client %d pas la\n", c->id);
-			pthread_mutex_unlock(&c->mutex_client);
-			sleep(1);
-		}
-		pthread_mutex_unlock(&c->mutex_client);
-	}
-}
 
 Data initData()
 {
@@ -80,12 +59,14 @@ Data initData()
 	for (i=0; i < NBCLIENT; i++)
 	{
 		d.clients[i].id = i;
-		d.clients[i].couloir = 0;
+		d.clients[i].couloir[0] = 0;
+		d.clients[i].couloir[1] = 0;
 		d.clients[i].dist = rand_min_max(2,31);
 		d.clients[i].present = rand_min_max(0,11);
 		d.clients[i].nbColis = 0;
 		d.clients[i].dronePresent = 0;
 		d.clients[i].mutex_client = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
+		d.clients[i].cond_client = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
 	}
 	
 	for (i=0; i < NBCOLIS; i++)
@@ -102,6 +83,7 @@ Data initData()
 	int premierApa = d.colis[0].poids, fin = 0;
 	i = 1;
 	
+	d.nbDocs = NBDOCS;
 	d.idMoyen = 0;
 	d.idLourd = 0;
 
@@ -131,6 +113,9 @@ Data initData()
 	d.mutex_docs = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
 	d.cond_docs = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
 
+	d.nbSlotsRecharge = NBSLOTS;
+	d.mutex_slotRecharge = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
+	d.cond_slotRecharge = (pthread_cond_t) PTHREAD_COND_INITIALIZER;	
 	return d;
 }
 

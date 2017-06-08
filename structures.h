@@ -4,6 +4,7 @@
 #define NBCOLIS 40
 #define NBCLIENT 40
 #define NBDOCS 4
+#define NBSLOTS 10
 
 #define TAILLELEGERCOLIS 3
 #define TAILLEMOYENCOLIS 6
@@ -12,12 +13,13 @@
 
 typedef struct Client{
 	int id;
-	int couloir; /* 0 : couloir libre, 1 : couloir occupé descente, -1 : couloir occupé remonté*/
+	int couloir[2]; /* 0 : couloir libre, 1 : couloir occupé */
 	int dist;
 	int present;
 	int nbColis;
 	int dronePresent;
-	pthread_mutex_t mutex_client;
+	pthread_mutex_t mutex_client;/* peut etre deux*/
+	pthread_cond_t cond_client;
 } Client;
 
 typedef struct Colis{
@@ -32,6 +34,9 @@ typedef struct Data{
 	pthread_mutex_t mutex_docs;
 	pthread_cond_t cond_docs;
 	int nbDocs;
+	pthread_mutex_t mutex_slotRecharge;
+	pthread_cond_t cond_slotRecharge;
+	int nbSlotRecharge;
 	int idMoyen;
 	int idLourd;
 } Data;
