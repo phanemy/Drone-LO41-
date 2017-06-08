@@ -85,7 +85,7 @@ Data initData()
 		id = rand_min_max(0,NBCLIENT);
 		d.clients[id].nbColis++;
 		d.colis[i].idClient = id;
-		d.colis[i].poids = 0;/*rand_min_max(0,11);*/
+		d.colis[i].poids = rand_min_max(0,11);
 		d.colis[i].livrer = 0;
 	}
 

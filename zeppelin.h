@@ -12,7 +12,7 @@
 #include "structures.h"
 #include "utiles.h"
 
-#define NBDRONE 1
+
 
 Data initData ();
 void livreColis (Client *c);

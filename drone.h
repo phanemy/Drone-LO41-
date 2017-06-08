@@ -6,7 +6,7 @@
 #include "structures.h"
 #include "utiles.h"
 #include <pthread.h>
-#define CAPACITEBATTERY 90
+
 
 
 void *droneThread(void *data);

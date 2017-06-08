@@ -4,11 +4,23 @@
 void *droneThread(void *data)
 {
 	/*printf("Threadid : %ld\n", pthread_self());*/
-	srand(time(NULL));
+	/*srand(time(pthread_self()));*/
 	Drone drone;
 	drone.capaciteActuel = 90;
-	drone.poidsMaximum = 0;/*rand_min_max(0,3);*/
-
+	drone.poidsMaximum = rand_min_max(0,100);
+	if(drone.poidsMaximum > 60)
+	{
+		drone.poidsMaximum = 2;
+	}
+	else if(drone.poidsMaximum >25 )
+	{
+		drone.poidsMaximum = 1;
+	}
+	else
+	{
+		drone.poidsMaximum = 0;
+	}
+	printf("\t\tpoidMax = %d\n",drone.poidsMaximum);
 	int idColis;
 	int i =0;
 	while(!toutFini(data) && i<100)
