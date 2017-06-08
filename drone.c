@@ -13,38 +13,107 @@ void *droneThread(void *data)
 	return NULL;
 }
 
-void rechercheColis(Data* data,Drone* drone)
+int rechercheColis(Data* data,Drone* drone)
 {
-	if(drone->capaciteActuel == 0)
+	int id;
+	int i,stop;
+	if(drone.poidsMaximum == 0)
 	{
-		rechercheColisLeger(data);
+		i = 0;
+		stop = data.idMoyen;
 	}
+	else if
+	{
+		i = data.idMoyen;
+		stop = data.idLourd;
+	}
+	else
+	{
+		i = data.idLourd;
+		stop = NBCOLIS;
+	}
+	
+	while(i < stop || data.colis[i] != 0)
+	{
+		i++;
+	}
+	if(i!=stop)
+	{
+		return i;
+	}
+	else
+	{
+		-1;
+	}
+	/*if(drone->capaciteActuel == 0)
+	{
+		id = rechercheColisLeger(data);
+	}
+	if(drone->capaciteActuel == 1)
+	{
+		id = rechercheColisMoyen(data);
+	}
+	if(drone->capaciteActuel == 2)
+	{
+		id = rechercheColisLourd(data);
+	}*/
+
 /*	else if()
 	else()*/
 }
 
-void rechercheColisLeger(Data* data)
+/*
+int rechercheColisLeger(Data* data)
 {	
 	int i = 0;
-	for(i = 0; i < NBCOLIS; i++)
+	while(i < NBCOLIS || data.leger[i] != 0)
 	{
-		data.leger[i]
+		i++;
+	}
+	if(i!=NBCOLIS)
+	{
+		return i;
+	}
+	else
+	{
+		-1;
 	}
 }
 
 void rechercheColisMoyen(Data* data)
 {
-	/*verif colis de poids voulu dispo et doc de livraison libre
-	
-	*/
+	int i = 0;
+	while(i < NBCOLIS || data.moyen[i] != 0)
+	{
+		i++;
+	}
+	if(i!=NBCOLIS)
+	{
+		return i;
+	}
+	else
+	{
+		-1;
+	}
 }
 
 void rechercheColisLourd(Data* data)
 {
-	/*verif colis de poids voulu dispo et doc de livraison libre
-	
-	*/
-}
+	int i = 0;
+	while(i < NBCOLIS || data.lourd[i] != 0)
+	{
+		i++;
+	}
+	if(i!=NBCOLIS)
+	{
+		return i;
+	}
+	else
+	{
+		-1;
+	}
+
+}*/
 
 void/*int*/ prendreColis(Colis colis)
 {

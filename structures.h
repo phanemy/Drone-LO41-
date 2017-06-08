@@ -30,6 +30,7 @@ typedef struct Data{
 	Client clients[NBCLIENT];
 	pthread_mutex_t mutex_docs[NBDOCS];
 	pthread_cond_t cond_docs[NBDOCS];
+	
 } Data;
 
 typedef struct Drone{
