@@ -3,19 +3,47 @@
 
 void *droneThread(void *data)
 {
-	printf("Threadid : %ld\n", pthread_self());
-	/*srand(time(NULL));
-	Drone* drone = (Drone*) malloc(sizeof(Drone));
-	drone.capaciteActuel = 90;
-	drone.poidsMaximum = rand_min_max(0,3);
-	//si 0 => leger, 1 => moyen, 2 => lourd
-	*/return NULL;
+	/*printf("Threadid : %ld\n", pthread_self());*/
+	srand(time(NULL));
+	Drone *drone = (Drone*) malloc(sizeof(Drone));
+	drone->capaciteActuel = 90;
+	drone->poidsMaximum = rand_min_max(0,3);
+	/*µprintf("capa = %d, poid = %d, thread = %ld\n",drone->capaciteActuel,drone->poidsMaximum, pthread_self());
+	si 0 => leger, 1 => moyen, 2 => lourd*/
+	return NULL;
 }
 
-void rechercheColis()
+void rechercheColis(Data* data,Drone* drone)
 {
-	/*moniteur?
-	verif colis de poids voulu dispo et doc de livraison libre*/
+	if(drone->capaciteActuel == 0)
+	{
+		rechercheColisLeger(data);
+	}
+/*	else if()
+	else()*/
+}
+
+void rechercheColisLeger(Data* data)
+{	
+	int i = 0;
+	for(i = 0; i < NBCOLIS; i++)
+	{
+		data.leger[i]
+	}
+}
+
+void rechercheColisMoyen(Data* data)
+{
+	/*verif colis de poids voulu dispo et doc de livraison libre
+	
+	*/
+}
+
+void rechercheColisLourd(Data* data)
+{
+	/*verif colis de poids voulu dispo et doc de livraison libre
+	
+	*/
 }
 
 void/*int*/ prendreColis(Colis colis)
@@ -82,3 +110,6 @@ void livre()
 	capacitéActuel = capaciteActuel - temps;
 	*/
 }
+
+
+

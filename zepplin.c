@@ -7,11 +7,11 @@ int main(){
 
 	/*affData (data);*/
 	
-	/*for (i=0; i < NBDRONE; i++)
+	for (i=0; i < NBDRONE; i++)
 	{
 		pthread_create (&drones[i], NULL, droneThread, &data);
-	}*/
-	
+	}
+	/*
 	for (i=0; i < NBCLIENT; i++)
 	{
 		pthread_create (&clients[i], NULL, clientThread, &data.clients[i]);
@@ -30,18 +30,18 @@ int main(){
 		sleep(1);
 		id = data.lourd[i].idClient;
 		livreColis(&data.clients[id]);
-	}
+	}*/
 	
-	/*for (i=0; i < NBDRONE; i++)
+	for (i=0; i < NBDRONE; i++)
 	{
 		pthread_join (drones[i], NULL);
-	}*/
-
+	}
+/*
 	for (i=0; i < NBCLIENT; i++)
 	{
 		pthread_join (clients[i], NULL);
 	}
-	
+	*/
 	return 0;
 }
 
@@ -91,22 +91,25 @@ Data initData()
 		d.leger[i].idClient = id;
 		d.clients[id].nbColis++;
 		d.leger[i].poids = rand_min_max(0,3);
+		d.leger[i] = 0;
 		
 		id = rand_min_max(0,NBCLIENT);
 		d.moyen[i].idClient = id;
 		d.clients[id].nbColis++;
 		d.moyen[i].poids = rand_min_max(2,6);
-
+		d.moyen[i] = 0;
+		
 		id = rand_min_max(0,NBCLIENT);
 		d.lourd[i].idClient = id;
 		d.clients[id].nbColis++;
 		d.lourd[i].poids = rand_min_max(5,11);
+		d.lourd[i] = 0;
 	}
 
 	for (i=0; i < NBDOCS; i++)
 	{
 		d.mutex_docs[i] = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
-		cond_docs[i] = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
+		d.cond_docs[i] = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
 	}
 	return d;
 }
