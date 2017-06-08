@@ -113,7 +113,7 @@ Data initData()
 	d.mutex_docs = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
 	d.cond_docs = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
 
-	d.nbSlotsRecharge = NBSLOTS;
+	d.nbSlotRecharge = NBSLOTS;
 	d.mutex_slotRecharge = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
 	d.cond_slotRecharge = (pthread_cond_t) PTHREAD_COND_INITIALIZER;	
 	return d;

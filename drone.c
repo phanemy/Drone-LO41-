@@ -33,18 +33,22 @@ int rechercheColis(Data* data,Drone* drone)
 		stop = NBCOLIS;
 	}
 	
-	while(i < stop || data->colis[i].livrer != 0)
+	int impossible = 1, idClient;
+
+	while(i < stop && impossible)
 	{
-		i++;
+		idClient = data->colis[i].idClient;
+		if (data->colis[i].livrer == 0 && (data->clients[idClient].dist * 0.5 + data->clients[idClient].dist * 1.5) < drone->capaciteActuel)
+			impossible = 0;
+		else
+			i++;
 	}
 	if(i!=stop)
-	{
 		return i;
-	}
+
 	else
-	{
-		-1;
-	}
+		return -1;
+
 	/*if(drone->capaciteActuel == 0)
 	{
 		id = rechercheColisLeger(data);
@@ -114,29 +118,6 @@ void rechercheColisLourd(Data* data)
 	}
 
 }*/
-
-void/*int*/ prendreColis(Data *data, Drone *d)
-{
-	/*int tempsD = CouloirX.distance * 0.5;
-	int tempsRMax = CouloirX.distance * 1.5; 
-	int temps = tempsD + tempsRMax;
-	if(temps>CapaciteActuel)
-	{
-		return 0;
-	}
-	else
-	{	
-		colis.livrer = -1;
-		return 1;
-	}
-	*/
-	/*int idColis, idClient;
-	if (d->poidsMaximum == 0)
-	{
-		idColis = rechercheColisLeger (data, d);
-		d->leger[idColis]
-	}*/
-}
 
 void recharge(Data* data,Drone* drone)
 {
