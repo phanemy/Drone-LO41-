@@ -19,15 +19,15 @@ int main(){
 
 	for (i=0; i < NBCOLIS; i++)
 	{
-		/*sleep(1);*/
+		sleep(1);
 		id = data.leger[i].idClient;
 		livreColis(&data.clients[id]);
 
-		/*sleep(1);*/
+		sleep(1);
 		id = data.moyen[i].idClient;
 		livreColis(&data.clients[id]);
 
-		/*sleep(1);*/
+		sleep(1);
 		id = data.lourd[i].idClient;
 		livreColis(&data.clients[id]);
 	}
@@ -47,25 +47,24 @@ int main(){
 
 void livreColis (Client *c) /*marche pas :( -> interblocage si client pas là*/
 {
-	do
+	int colisLivre = 0;
+	while(!colisLivre)
 	{
 		pthread_mutex_lock (&c->mutex_client);
 		if (c->present)
 		{
 			c->nbColis--;
+			colisLivre = 1;
 			printf("Colis livre pour le client %d\n", c->id);
 		}
 		else
 		{
 			printf("Le client %d pas la\n", c->id);
 			pthread_mutex_unlock(&c->mutex_client);
-			pthread_cond_signal (&c->cond_client);
 			sleep(1);
-			pthread_mutex_lock (&c->mutex_client);
 		}
-	}while (!c->present);
-	pthread_mutex_unlock(&c->mutex_client);
-	pthread_cond_signal (&c->cond_client);
+		pthread_mutex_unlock(&c->mutex_client);
+	}
 }
 
 Data initData()
@@ -84,7 +83,6 @@ Data initData()
 		d.clients[i].nbColis = 0;
 		d.clients[i].dronePresent = 0;
 		d.clients[i].mutex_client = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
-		d.clients[i].cond_client = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
 	}
 	
 	for (i=0; i < NBCOLIS; i++)
@@ -103,6 +101,12 @@ Data initData()
 		d.lourd[i].idClient = id;
 		d.clients[id].nbColis++;
 		d.lourd[i].poids = rand_min_max(5,11);
+	}
+
+	for (i=0; i < NBDOCS; i++)
+	{
+		d.mutex_docs[i] = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
+		cond_docs[i] = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
 	}
 	return d;
 }

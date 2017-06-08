@@ -10,11 +10,11 @@ void *clientThread(void *data)
 
 void gestionClient (Client *c)
 {
-	pthread_mutex_lock (&c->mutex_client);
 	while (c->nbColis > 0)
 	{
-		pthread_cond_wait(&c->cond_client, &c->mutex_client);
+		pthread_mutex_lock (&c->mutex_client);
 		c->present = rand_min_max(0,11);
+		pthread_mutex_unlock(&c->mutex_client);
+		sleep(3);
 	}
-	pthread_mutex_unlock(&c->mutex_client);
 }
