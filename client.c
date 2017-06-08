@@ -5,9 +5,11 @@ void *clientThread(void *data)
 	Client *c = (Client*) data;
 		
 	gestionClient(c);
-	printf("Le client %d a recu tout ses colis\n", c->id);
-	
-	
+	char chaine[50];
+	sprintf(chaine, "Le client %d a recu tout ses colis\n", c->id);
+	green(chaine);
+	/*printf("Le client %d a recu tout ses colis\n", c->id);
+	printf("blabla\n");*/
 	return NULL;
 }
 

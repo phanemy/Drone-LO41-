@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "structures.h"
+#include "utiles.h"
 #include <pthread.h>
 #define CAPACITEBATTERY 90
 

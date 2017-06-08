@@ -1,4 +1,4 @@
-#include "zepplin.h"
+#include "zeppelin.h"
 
 int main(){
 	Data data = initData();
@@ -6,9 +6,19 @@ int main(){
 	int i, id;
 
 	affData(data);
+
+	green("Du vert !!! :D\n");
+
+	/*return 0;*/
+
+	blue("Du bleu !\n");
+	cyan("Du bleu pas pareil :O\n");
+	red("Du rouge erreur ! :(\n");
+	yellow("Du jaune !\n");
+
 	for (i=0; i < NBCLIENT; i++)
 	{	
-		printf("creation client n°%d",i);
+		/*printf("creation client n°%d",i);*/
 		pthread_create (&clients[i], NULL, clientThread, &data.clients[i]);
 	}
 

@@ -48,13 +48,13 @@ int toutFini(Data* data)
 		i++;
 	}
 	/*printf("bool = %d",bool);*/
-printf("toutfini fin\n");
+printf("toutfini fin\n------------------\n");
 	return bool;
 }
 
 int rechercheColis(Data* data,Drone* drone)
 {
-	printf("rechercheCOlis\n");
+	printf("rechercheColis\n");
 	int id;
 	int i,stop;
 	if(drone->poidsMaximum == 0)
@@ -86,12 +86,12 @@ int rechercheColis(Data* data,Drone* drone)
 	}
 	if(i!=stop)
 	{	
-	printf("rechercheCOlis fin\n");	
-	return i;	
+		printf("rechercheColis fin\n------------------\n");	
+		return i;	
 	}
 	else
 	{
-printf("rechercheCOlis fin\n");	
+		printf("rechercheColis fin\n------------------\n");	
 		return -1;
 	
 	}
@@ -134,12 +134,12 @@ void recharge(Data* data,Drone* drone)
 		data->nbSlotRecharge++;
 		pthread_cond_signal(&data->cond_slotRecharge);
 	pthread_mutex_unlock(&data->mutex_slotRecharge);
-	printf("recharge fin\n");
+	printf("recharge fin\n------------------\n");
 }
 
 void livreColis(Data* data, int i,Drone* drone)
 {
-	printf("livreCOlis\n");
+	printf("livreColis\n");
 	Client* client = &data->clients[data->colis[i].idClient];
 	int temps;
 	pthread_mutex_lock(&client->mutex_client);
@@ -203,12 +203,12 @@ ON block  une fois qu'un client a fini desormais
 		pthread_cond_signal(&client->cond_client);
 	pthread_mutex_unlock(&client->mutex_client);
 
-	printf("livreCOlis fin\n");
+	printf("livreColis fin\n------------------\n");
 }
 
 int donneColis(Client *c)
 {
-	printf("donneCOlis\n");
+	printf("donneColis\n");
 	int colisLivre = 0;
 	int i = 0;
 	while(!colisLivre && i<5)
@@ -222,7 +222,9 @@ int donneColis(Client *c)
 		}
 		else
 		{
-			printf("Le client %d pas la\n", c->id);
+			char chaine[50];
+			sprintf(chaine, "Le client %d pas la\n", c->id);
+			red(chaine);
 			pthread_mutex_unlock(&c->mutex_client);
 			sleep(1);
 		}
@@ -230,11 +232,11 @@ int donneColis(Client *c)
 		i++;
 	}
 	if(i == 5)
-	{printf("donneCOlis fin\n");
+	{printf("donneCOlis fin\n------------------\n");
 		return 0;
 	}
 	else
-	{printf("donneCOlis fin\n");
+	{printf("donneCOlis fin\n------------------\n");
 		return 1;
 	}
 

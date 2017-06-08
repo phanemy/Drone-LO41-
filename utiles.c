@@ -39,3 +39,28 @@ int rand_min_max (int min, int max)
 {
 	return rand()%(min - max) + min;
 }
+
+void red(char *chaine)
+{
+	printf("%s%s%s", RED, chaine, NC);
+}
+
+void blue(char *chaine)
+{
+	printf("%s%s%s", BLUE, chaine, NC);
+}
+
+void cyan(char *chaine)
+{
+	printf("%s%s%s", CYAN, chaine, NC);
+}
+
+void green(char *chaine)
+{
+	printf("%s%s%s", GREEN, chaine, NC);
+}
+
+void yellow(char *chaine)
+{
+	printf("%s%s%s", YELLOW, chaine, NC);
+}
