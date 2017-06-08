@@ -23,7 +23,7 @@ int toutFini(Date* data)
 {
 	int i=0,bool=1;
 	
-	while(i < NBCOLIS || bool)
+	while(i < NBCOLIS && bool)
 	{
 		if(data->colis[i].livrer == 1)
 		{
@@ -85,41 +85,6 @@ int rechercheColis(Data* data,Drone* drone)
 }
 
 
-void rechercheColisMoyen(Data* data)
-{
-	int i = 0;
-	while(i < NBCOLIS || data.moyen[i] != 0)
-	{
-		i++;
-	}
-	if(i!=NBCOLIS)
-	{
-		return i;
-	}
-	else
-	{
-		-1;
-	}
-}
-
-void rechercheColisLourd(Data* data)
-{
-	int i = 0;
-	while(i < NBCOLIS || data.lourd[i] != 0)
-	{
-		i++;
-	}
-	if(i!=NBCOLIS)
-	{
-		return i;
-	}
-	else
-	{
-		-1;
-	}
-
-}*/
-
 void recharge(Data* data,Drone* drone)
 {
 	pthread_mutex_lock(&data->mutex_slotRecharge);
@@ -142,7 +107,6 @@ void recharge(Data* data,Drone* drone)
 		pthread_cond_signal(&data->cond_slotRecharge);
 	pthread_mutex_unlock(&data->mutex_slotRecharge);
 }
-
 
 void livreColis(Data* data, int i,Drone* drone)
 {
@@ -233,7 +197,7 @@ int donneColis(Client *c)
 {
 	int colisLivre = 0;
 	int i = 0;
-	while(!colisLivre || i<5)
+	while(!colisLivre && i<5)
 	{
 		pthread_mutex_lock (&c->mutex_client);
 		if (c->present)
