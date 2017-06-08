@@ -45,7 +45,7 @@ int main(){
 	return 0;
 }
 
-void livreColis (Client *c) /*marche pas :( -> interblocage si client pas là*/
+void livreColis (Client *c)
 {
 	int colisLivre = 0;
 	while(!colisLivre)
@@ -77,7 +77,7 @@ Data initData()
 	for (i=0; i < NBCLIENT; i++)
 	{
 		d.clients[i].id = i;
-		d.clients[i].couloir = rand_min_max(0,5);
+		d.clients[i].couloir = 0;
 		d.clients[i].dist = rand_min_max(2,31);
 		d.clients[i].present = rand_min_max(0,11);
 		d.clients[i].nbColis = 0;
@@ -88,28 +88,20 @@ Data initData()
 	for (i=0; i < NBCOLIS; i++)
 	{
 		id = rand_min_max(0,NBCLIENT);
-		d.leger[i].idClient = id;
 		d.clients[id].nbColis++;
-		d.leger[i].poids = rand_min_max(0,3);
-		d.leger[i] = 0;
-		
-		id = rand_min_max(0,NBCLIENT);
-		d.moyen[i].idClient = id;
-		d.clients[id].nbColis++;
-		d.moyen[i].poids = rand_min_max(2,6);
-		d.moyen[i] = 0;
-		
-		id = rand_min_max(0,NBCLIENT);
-		d.lourd[i].idClient = id;
-		d.clients[id].nbColis++;
-		d.lourd[i].poids = rand_min_max(5,11);
-		d.lourd[i] = 0;
+		d.colis[i].idClient = id;
+		d.colis[i].poids = rand_min_max(0,11);
+		d.colis[i].livrer = 0;
 	}
+	
+	d.nbColis = NBCOLIS;
+	d.mutex_docs = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
+	cond_docs = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
 
-	for (i=0; i < NBDOCS; i++)
-	{
-		d.mutex_docs[i] = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
-		d.cond_docs[i] = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
-	}
 	return d;
+}
+
+void triColis (Data *d)
+{
+	
 }

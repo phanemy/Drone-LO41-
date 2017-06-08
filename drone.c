@@ -5,7 +5,7 @@ void *droneThread(void *data)
 {
 	/*printf("Threadid : %ld\n", pthread_self());*/
 	srand(time(NULL));
-	Drone *drone = (Drone*) malloc(sizeof(Drone));
+	Drone *drone;
 	drone->capaciteActuel = 90;
 	drone->poidsMaximum = rand_min_max(0,3);
 	/*µprintf("capa = %d, poid = %d, thread = %ld\n",drone->capaciteActuel,drone->poidsMaximum, pthread_self());
@@ -115,7 +115,7 @@ void rechercheColisLourd(Data* data)
 
 }*/
 
-void/*int*/ prendreColis(Colis colis)
+void/*int*/ prendreColis(Data *data, Drone *d)
 {
 	/*int tempsD = CouloirX.distance * 0.5;
 	int tempsRMax = CouloirX.distance * 1.5; 
@@ -130,6 +130,12 @@ void/*int*/ prendreColis(Colis colis)
 		return 1;
 	}
 	*/
+	/*int idColis, idClient;
+	if (d->poidsMaximum == 0)
+	{
+		idColis = rechercheColisLeger (data, d);
+		d->leger[idColis]
+	}*/
 }
 
 void recharge()

@@ -1,7 +1,7 @@
 #ifndef STRUCTURES_H_INCLUDED
 #define STRUCTURES_H_INCLUDED
 
-#define NBCOLIS 10 /*nb colis par categorie*/
+#define NBCOLIS 40
 #define NBCLIENT 40
 #define NBDOCS 4
 
@@ -9,7 +9,7 @@
 
 typedef struct Client{
 	int id;
-	int couloir;
+	int couloir; /* 0 : couloir libre, 1 : couloir occupé descente, -1 : couloir occupé remonté*/
 	int dist;
 	int present;
 	int nbColis;
@@ -24,13 +24,13 @@ typedef struct Colis{
 } Colis;
 
 typedef struct Data{
-	Colis leger[NBCOLIS];
-	Colis moyen[NBCOLIS];
-	Colis lourd[NBCOLIS];
+	Colis colis[NBCOLIS];
 	Client clients[NBCLIENT];
-	pthread_mutex_t mutex_docs[NBDOCS];
-	pthread_cond_t cond_docs[NBDOCS];
-	
+	pthread_mutex_t mutex_docs;
+	pthread_cond_t cond_docs;
+	int nbDocs;
+	int idMoyen;
+	int idLourd;
 } Data;
 
 typedef struct Drone{
