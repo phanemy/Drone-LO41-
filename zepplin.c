@@ -126,6 +126,7 @@ void destroyTout (Data *d)
 	for (i=0; i < NBCLIENT; i++)
 	{
 		pthread_mutex_destroy(&d->clients[i].mutex_client);
+		pthread_cond_destroy(&d->clients[i].cond_client);
 	}
 	pthread_mutex_destroy(&d->mutex_docs);
 	pthread_cond_destroy(&d->cond_docs);

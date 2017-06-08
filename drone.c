@@ -8,9 +8,29 @@ void *droneThread(void *data)
 	Drone *drone;
 	drone->capaciteActuel = 90;
 	drone->poidsMaximum = rand_min_max(0,3);
-	/*printf("capa = %d, poids = %d, thread = %ld\n",drone->capaciteActuel,drone->poidsMaximum, pthread_self());
-	si 0 => leger, 1 => moyen, 2 => lourd*/
+	int idColis;
+	while(!toutFini(data))
+	{ 
+		idColis = rechercheColis(data,drone);
+		livreColis(data,idColis,drone);
+	}
 	return NULL;
+}
+
+/* fonction qui decremente le poids focus par le drone si son ancien et totalement livrer.*/
+
+int toutFini(Date* data)
+{
+	int i=0,bool=1;
+	
+	while(i < NBCOLIS || bool)
+	{
+		if(data->colis[i].livrer == 1)
+		{
+			bool = 0;	
+		}
+	}
+	return bool;
 }
 
 int rechercheColis(Data* data,Drone* drone)
@@ -62,27 +82,8 @@ int rechercheColis(Data* data,Drone* drone)
 		id = rechercheColisLourd(data);
 	}*/
 
-/*	else if()
-	else()*/
 }
 
-/*
-int rechercheColisLeger(Data* data)
-{	
-	int i = 0;
-	while(i < NBCOLIS || data.leger[i] != 0)
-	{
-		i++;
-	}
-	if(i!=NBCOLIS)
-	{
-		return i;
-	}
-	else
-	{
-		-1;
-	}
-}
 
 void rechercheColisMoyen(Data* data)
 {
