@@ -1,20 +1,13 @@
 #include "zeppelin.h"
 
+/*../nptl/pthread_mutex_lock.c:80: __pthread_mutex_lock: Assertion `mutex->__data.__owner == 0' failed.*/
+
 int main(){
 	Data data = initData();
 	pthread_t drones[NBDRONE], clients[NBCLIENT];
 	int i, id;
 
 	affData(data);
-
-	green("Du vert !!! :D\n");
-
-	/*return 0;*/
-
-	blue("Du bleu !\n");
-	cyan("Du bleu pas pareil :O\n");
-	red("Du rouge erreur ! :(\n");
-	yellow("Du jaune !\n");
 
 	for (i=0; i < NBCLIENT; i++)
 	{	
@@ -125,8 +118,9 @@ Data initData()
 	d.cond_docs = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
 
 	d.nbSlotRecharge = NBSLOTS;
-	d.mutex_slotRecharge = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
-	d.cond_slotRecharge = (pthread_cond_t) PTHREAD_COND_INITIALIZER;	
+	/*d.mutex_slotRecharge = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;*/
+	pthread_mutex_init(&d.mutex_slotRecharge, NULL);
+	d.cond_slotRecharge = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
 	return d;
 }
 

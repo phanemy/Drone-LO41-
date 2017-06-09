@@ -4,8 +4,8 @@
 #define NBCOLIS 40
 #define NBCLIENT 10
 #define NBDOCS 4
-#define NBSLOTS 10
-#define NBDRONE 6
+#define NBSLOTS 2
+#define NBDRONE 10
 #define CAPACITEBATTERY 90
 
 #define TAILLELEGERCOLIS 3
