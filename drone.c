@@ -25,7 +25,7 @@ void *droneThread(void *data)
 	cyan(chaine);
 	int idColis;
 	int i =0;
-	while(!toutFini(data) && drone.poidsMaximum > 0)
+	while(drone.poidsMaximum >= 0)
 	{ 	
 		/*printf("pls");*/
 		idColis = rechercheColis(data,&drone);
@@ -37,7 +37,7 @@ void *droneThread(void *data)
 		else
 			livreColis(data,idColis,&drone);
 		/*printf("id colis = %d\n",idColis);*/
-		/**/i++;
+		/**/
 	}
 	green("Fin thread drone\n");
 	return NULL;
@@ -68,7 +68,7 @@ int rechercheColis(Data* data,Drone* drone)
 {
 	/*printf("rechercheColis\n");*/
 	int id;
-	int i,stop;
+	int i,stop = 0;
 	if(drone->poidsMaximum == 0)
 	{
 		i = 0;
@@ -85,34 +85,40 @@ int rechercheColis(Data* data,Drone* drone)
 		stop = NBCOLIS;
 	}
 	
-	int impossible = 1, plusCollis = 1, idClient;
+	int impossible = 1, plusCollis = 1, idClient,tps;
 
-	while(i < stop && impossible)
+	pthread_mutex_lock(&data->mutex_collis);
+
+	while(i < stop && impossible )
 	{
 		/*printf("%d\n",i);*/
 		idClient = data->colis[i].idClient;
-		if (data->colis[i].livrer == 0)
+		tps =(data->clients[idClient].dist * 0.5 + data->clients[idClient].dist * 1.5);
+		if(data->colis[i].livrer == 0 )
 		{
 			plusCollis = 0;
-			if ((data->clients[idClient].dist * 0.5 + data->clients[idClient].dist * 1.5) < drone->capaciteActuel)
-				impossible = 0;
 		}
-		i++;
-	}
 
-	if(i!=stop)
-		return i;
-
-	i--;
-
-	else
-	{
-		if (plusCollis)
-			return -2;
+		if (data->colis[i].livrer == 0 && tps<drone->capaciteActuel)
+		{		
+			impossible = 0;
+		}
 		else
-			return -1;
-	
+			i++;
 	}
+
+	if (plusCollis)
+		i = -2;
+	else if (i == stop)
+		i = -1;
+	else
+		data->colis[i].livrer = -1;
+
+	pthread_mutex_unlock(&data->mutex_collis);
+
+	return i;
+
+	/*printf(" i= %d,stop = %d,livre = %d, impossible = %d, plus collis = %d\n",i,stop,data->colis[i].livrer,impossible,plusCollis);*/
 	/*if(drone->capaciteActuel == 0)
 	{
 		id = rechercheColisLeger(data);
