@@ -1,11 +1,11 @@
 #ifndef STRUCTURES_H_INCLUDED
 #define STRUCTURES_H_INCLUDED
 
-#define NBCOLIS 40
-#define NBCLIENT 10
+#define NBCOLIS 30
+#define NBCLIENT 4
 #define NBDOCS 4
-#define NBSLOTS 10
-#define NBDRONE 6
+#define NBSLOTS 4
+#define NBDRONE 10
 #define CAPACITEBATTERY 90
 
 #define TAILLELEGERCOLIS 3
@@ -41,6 +41,7 @@ typedef struct Data{
 	int nbSlotRecharge;
 	int idMoyen;
 	int idLourd;
+	pthread_mutex_t mutex_collis;
 } Data;
 
 typedef struct Drone{

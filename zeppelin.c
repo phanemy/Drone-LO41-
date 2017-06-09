@@ -1,20 +1,13 @@
 #include "zeppelin.h"
 
+/*../nptl/pthread_mutex_lock.c:80: __pthread_mutex_lock: Assertion `mutex->__data.__owner == 0' failed.*/
+
 int main(){
 	Data data = initData();
 	pthread_t drones[NBDRONE], clients[NBCLIENT];
 	int i, id;
 
 	affData(data);
-
-	green("Du vert !!! :D\n");
-
-	/*return 0;*/
-
-	blue("Du bleu !\n");
-	cyan("Du bleu pas pareil :O\n");
-	red("Du rouge erreur ! :(\n");
-	yellow("Du jaune !\n");
 
 	for (i=0; i < NBCLIENT; i++)
 	{	
@@ -76,7 +69,8 @@ Data initData()
 		d.clients[i].present = rand_min_max(0,11);
 		d.clients[i].nbColis = 0;
 		d.clients[i].dronePresent = 0;
-		d.clients[i].mutex_client = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
+		/*d.clients[i].mutex_client = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;*/
+		pthread_mutex_init(&d.clients[i].mutex_client, NULL);
 		d.clients[i].cond_client = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
 	}
 	
@@ -121,12 +115,16 @@ Data initData()
 	if (i == NBCOLIS && d.idLourd == 0)
 		d.idLourd = NBCOLIS;
 
-	d.mutex_docs = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
+	/*d.mutex_docs = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;*/
+	pthread_mutex_init(&d.mutex_docs, NULL);
 	d.cond_docs = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
 
 	d.nbSlotRecharge = NBSLOTS;
-	d.mutex_slotRecharge = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;
-	d.cond_slotRecharge = (pthread_cond_t) PTHREAD_COND_INITIALIZER;	
+	/*d.mutex_slotRecharge = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;*/
+	pthread_mutex_init(&d.mutex_slotRecharge, NULL);
+	d.cond_slotRecharge = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
+
+	pthread_mutex_init(&d.mutex_collis, NULL);
 	return d;
 }
 
@@ -145,7 +143,7 @@ void destroyTout (Data *d)
 
 void triColis (Data *d)
 {
-	int i, j, changement;
+	int i = 0, j, changement;
 	Colis temps;
 	do
 	{
