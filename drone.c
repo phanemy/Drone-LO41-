@@ -31,8 +31,7 @@ void *droneThread(void *data)
 	{
 		pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, NULL);
 		/*printf("pls");*/
-		idColis = rechercheColis(data,&drone);
-		printf("idCOlis = %d\n",idColis);
+		idColis = prendreColis(data, &drone);
 		if(idColis == -1)
 			recharge(data,&drone);
 		else if (idColis == -2)
@@ -138,6 +137,42 @@ int rechercheColis(Data* data,Drone* drone)
 
 }
 
+int prendreColis(Data* data, Drone* drone)
+{
+	/*printf("recharge\n");*/
+	char chaine[50];
+	int idColis;
+	pthread_mutex_lock(&data->mutex_docksAppro);
+	/*printf("nb slot %d\tdrone = %ld\n", data->nbSlotRecharge, pthread_self());*/
+		while (data->nbDocksAppro <= 0)/*expliquer pq while et pas if*/
+		{
+			/*printf("wait %d\t\tdrone : %ld\n", data->nbSlotRecharge, pthread_self());*/
+			pthread_cond_wait(&data->cond_docksAppro, &data->mutex_docksAppro);
+			/*printf("JE DEMARRE\n");*/
+		}
+		/*printf("\t\t\tnb slot avant -- = %d\n", data->nbSlotRecharge);*/
+		data->nbDocksAppro--;
+	
+		sprintf(chaine, "Le drone %ld se connecte au dock\n",pthread_self());
+		yellow(chaine);
+	pthread_mutex_unlock(&data->mutex_docksAppro);
+
+	/* utiliser recherche colis ici*/
+
+	idColis = rechercheColis(data,drone);
+	printf("idCOlis = %d\n",idColis);
+	/* mettre printf pour dire si colis prit ou non*/
+	
+	pthread_mutex_lock(&data->mutex_docksAppro);
+		sprintf(chaine, "Le drone %ld se detache du dock\n",pthread_self());
+		yellow(chaine);
+		data->nbDocksAppro++;
+		/*printf("\t\t\tnb slot apres ++ = %d\n", data->nbSlotRecharge);*/
+		pthread_cond_signal(&data->cond_docksAppro);
+	pthread_mutex_unlock(&data->mutex_docksAppro);
+	/*printf("recharge fin\n------------------\n");*/
+	return idColis;
+}
 
 void recharge(Data* data,Drone* drone)
 {

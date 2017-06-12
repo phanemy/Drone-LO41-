@@ -5,6 +5,7 @@
 #define NBCLIENT 4
 #define NBDOCS 4
 #define NBSLOTS 4
+#define NBDOCKS 8
 #define NBDRONE 10
 #define CAPACITEBATTERY 90
 
@@ -36,9 +37,16 @@ typedef struct Data{
 	pthread_mutex_t mutex_docs;
 	pthread_cond_t cond_docs;
 	int nbDocs;
+
+	int nbSlotRecharge;
 	pthread_mutex_t mutex_slotRecharge;
 	pthread_cond_t cond_slotRecharge;
-	int nbSlotRecharge;
+
+	int nbDocksAppro;
+	pthread_mutex_t mutex_docksAppro;
+	pthread_cond_t cond_docksAppro;
+
+	
 	int idMoyen;
 	int idLourd;
 	pthread_mutex_t mutex_collis;

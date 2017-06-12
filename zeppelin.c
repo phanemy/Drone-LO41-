@@ -126,6 +126,13 @@ Data initData()
 	pthread_mutex_init(&d.mutex_slotRecharge, NULL);
 	d.cond_slotRecharge = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
 
+	d.nbDocksAppro = NBDOCKS;
+	/*d.mutex_slotRecharge = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;*/
+	pthread_mutex_init(&d.mutex_docksAppro, NULL);
+	d.cond_docksAppro = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
+
+
+
 	pthread_mutex_init(&d.mutex_collis, NULL);
 	return d;
 }
@@ -144,6 +151,9 @@ void destroyTout (Data *d)
 	
 	pthread_mutex_destroy(&d->mutex_docs);
 	pthread_cond_destroy(&d->cond_docs);
+
+	pthread_mutex_destroy(&d->mutex_docksAppro);
+	pthread_cond_destroy(&d->cond_docksAppro);	
 
 	pthread_mutex_destroy(&d->mutex_slotRecharge);
 	pthread_cond_destroy(&d->cond_slotRecharge);
