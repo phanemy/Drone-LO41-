@@ -1,27 +1,27 @@
 #include "zeppelin.h"
 
-/*../nptl/pthread_mutex_lock.c:80: __pthread_mutex_lock: Assertion `mutex->__data.__owner == 0' failed.*/
+pthread_t drones[NBDRONE], clients[NBCLIENT];
 
 int main(){
 	Data data = initData();
-	pthread_t drones[NBDRONE], clients[NBCLIENT];
 	int i, id;
 
 	affData(data);
 
 	for (i=0; i < NBCLIENT; i++)
-	{	
-		/*printf("creation client n°%d",i);*/
-		pthread_create (&clients[i], NULL, clientThread, &data.clients[i]);
+	{
+		if (pthread_create (&clients[i], NULL, clientThread, &data.clients[i]))
+			exit(EXIT_FAILURE);
 	}
 
 	for (i=0; i < NBDRONE; i++)
 	{	
 		printf("\ncreation drone n°%d\n\n",i);
-		pthread_create (&drones[i], NULL, droneThread, &data);
+		if (pthread_create (&drones[i], NULL, droneThread, &data))
+			exit(EXIT_FAILURE);
 	}
-	
-	
+
+	signal(SIGINT, traitantSIGINT);
 
 	/*for (i=0; i < NBCOLIS; i++)
 	{
@@ -48,6 +48,8 @@ int main(){
 	}
 	
 	destroyTout(&data);
+
+	green("Fin de la simulation\n");
 
 	return 0;
 }
@@ -132,13 +134,21 @@ void destroyTout (Data *d)
 {
 	int i;
 
+	yellow("Nettoyage\n");
+
 	for (i=0; i < NBCLIENT; i++)
 	{
 		pthread_mutex_destroy(&d->clients[i].mutex_client);
 		pthread_cond_destroy(&d->clients[i].cond_client);
 	}
+	
 	pthread_mutex_destroy(&d->mutex_docs);
 	pthread_cond_destroy(&d->cond_docs);
+
+	pthread_mutex_destroy(&d->mutex_slotRecharge);
+	pthread_cond_destroy(&d->cond_slotRecharge);
+
+	pthread_mutex_destroy(&d->mutex_collis);
 }
 
 void triColis (Data *d)
@@ -160,4 +170,30 @@ void triColis (Data *d)
 		}
 		i++;
 	}while (changement && i < NBCOLIS);
+}
+
+void traitantSIGINT(int num){
+	sigset_t ens;
+	int i;
+
+	sigemptyset(&ens);
+	sigaddset(&ens,SIGINT);
+
+	sigprocmask(SIG_SETMASK, &ens, NULL);
+
+	if (num != SIGINT)
+		fprintf(stderr, "Probleme sur SigInt\n");
+
+	for (i=0; i<NBDRONE; i++)
+	{
+		if (pthread_cancel(drones[i]))
+			printf("Pb liberation drones\n");
+	}
+
+	for (i=0; i<NBCLIENT; i++)
+	{
+		if (pthread_cancel(clients[i]))
+			printf("Pb liberation clients\n");
+	}
+	red("Control C\n");
 }

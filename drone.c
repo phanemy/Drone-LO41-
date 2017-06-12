@@ -5,6 +5,8 @@ void *droneThread(void *data)
 {
 	/*printf("Threadid : %ld\n", pthread_self());*/
 	/*srand(time(pthread_self()));*/
+	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
+
 	Drone drone;
 	drone.capaciteActuel = 90;
 	drone.poidsMaximum = rand_min_max(0,100);
@@ -26,7 +28,8 @@ void *droneThread(void *data)
 	int idColis;
 	int i =0;
 	while(drone.poidsMaximum >= 0)
-	{ 	
+	{
+		pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, NULL);
 		/*printf("pls");*/
 		idColis = rechercheColis(data,&drone);
 		printf("idCOlis = %d\n",idColis);
@@ -38,9 +41,10 @@ void *droneThread(void *data)
 			livreColis(data,idColis,&drone);
 		/*printf("id colis = %d\n",idColis);*/
 		/**/
+		pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
 	}
 	green("Fin thread drone\n");
-	return NULL;
+	pthread_exit(NULL);
 }
 
 /* fonction qui decremente le poids focus par le drone si son ancien et totalement livrer.*/

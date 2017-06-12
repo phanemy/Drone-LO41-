@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-W -Wall -ansi -pedantic
+CFLAGS=-W -Wall -pedantic
 LDFLAGS=-lpthread
 EXEC=zeppelin
 SRC= $(wildcard *.c)

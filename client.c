@@ -3,6 +3,9 @@
 void *clientThread(void *data)
 {
 	Client *c = (Client*) data;
+
+	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
+	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
 		
 	gestionClient(c);
 	char chaine[50];
@@ -10,7 +13,7 @@ void *clientThread(void *data)
 	green(chaine);
 	/*printf("Le client %d a recu tout ses colis\n", c->id);
 	printf("blabla\n");*/
-	return NULL;
+	pthread_exit(NULL);
 }
 
 void gestionClient (Client *c)
