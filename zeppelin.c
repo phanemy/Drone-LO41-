@@ -1,10 +1,14 @@
 #include "zeppelin.h"
 
 pthread_t drones[NBDRONE], clients[NBCLIENT];
+int controlC = 1;
+Data data;
 
 int main(){
-	Data data = initData();
+	data = initData();
 	int i, id;
+
+	signal(SIGTSTP, traitantSIGTSTP);
 
 	affData(data);
 
@@ -46,9 +50,11 @@ int main(){
 	{
 		pthread_join (clients[i], NULL);
 	}
+
+	affData(data);
 	
 	destroyTout(&data);
-	affData(data);
+
 	green("Fin de la simulation\n");
 
 	return 0;
@@ -183,27 +189,37 @@ void triColis (Data *d)
 }
 
 void traitantSIGINT(int num){
-	sigset_t ens;
+	if (controlC)
+	{
+		int i;
+
+		if (num != SIGINT)
+			fprintf(stderr, "Probleme sur SigInt\n");
+
+		for (i=0; i<NBDRONE; i++)
+		{
+			if (pthread_cancel(drones[i]))
+				printf("Pb liberation drones\n");
+		}
+
+		for (i=0; i<NBCLIENT; i++)
+		{
+			if (pthread_cancel(clients[i]))
+				printf("Pb liberation clients\n");
+		}
+		controlC = 0;
+		red("Control C\n");
+	}
+}
+
+void traitantSIGTSTP (int num)
+{
 	int i;
 
-	sigemptyset(&ens);
-	sigaddset(&ens,SIGINT);
+	if (num != SIGTSTP)
+		fprintf(stderr, "Probleme sur SigTstp\n");
 
-	sigprocmask(SIG_SETMASK, &ens, NULL);
+	affData(data);
 
-	if (num != SIGINT)
-		fprintf(stderr, "Probleme sur SigInt\n");
-
-	for (i=0; i<NBDRONE; i++)
-	{
-		if (pthread_cancel(drones[i]))
-			printf("Pb liberation drones\n");
-	}
-
-	for (i=0; i<NBCLIENT; i++)
-	{
-		if (pthread_cancel(clients[i]))
-			printf("Pb liberation clients\n");
-	}
-	red("Control C\n");
+	raise(SIGSTOP);
 }

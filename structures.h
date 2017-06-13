@@ -45,7 +45,6 @@ typedef struct Data{
 	int nbDocksAppro;
 	pthread_mutex_t mutex_docksAppro;
 	pthread_cond_t cond_docksAppro;
-
 	
 	int idMoyen;
 	int idLourd;

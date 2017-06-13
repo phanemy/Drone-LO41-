@@ -32,7 +32,23 @@ void affClient (Client c)
 
 void affColis (Colis c)
 {
-	printf("idCli : %d, poids : %d, etat : %d\n", c.idClient, c.poids, c.livrer);
+	char chaine[100];
+	sprintf(chaine, "idCli : %d, poids : %d, etat : ", c.idClient, c.poids);
+	if (c.livrer == 1)
+	{
+		strcat(chaine, "Livrer\n");
+		green(chaine);
+	}
+	else if(c.livrer == 0)
+	{
+		strcat(chaine, "Pas livrer\n");
+		red(chaine);
+	}
+	else
+	{
+		strcat(chaine, "En cours\n");
+		yellow(chaine);
+	}
 }
 
 int rand_min_max (int min, int max)

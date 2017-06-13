@@ -332,7 +332,3 @@ int donneColis(Client *c)
 	}
 
 }
-
-
-
-

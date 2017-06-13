@@ -3,11 +3,10 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <signal.h>
+#include <pthread.h>
 #include "structures.h"
 #include "utiles.h"
-#include <pthread.h>
-
-
 
 void *droneThread(void *data);
 
