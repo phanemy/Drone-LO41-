@@ -8,25 +8,10 @@ void *droneThread(void *data)
 	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
 
 	Drone drone;
-	drone.capaciteActuel = 90;
-	drone.poidsMaximum = rand_min_max(0,100);
-	char chaine[50];
-	if(drone.poidsMaximum > 60)
-	{
-		drone.poidsMaximum = 2;
-	}
-	else if(drone.poidsMaximum >25 )
-	{
-		drone.poidsMaximum = 1;
-	}
-	else
-	{
-		drone.poidsMaximum = 0;
-	}
-	sprintf(chaine, "\t\tpoidMax = %d\n",drone.poidsMaximum);
-	cyan(chaine);
+	initDrone(&drone);
 	int idColis;
 	int i =0;
+
 	while(drone.poidsMaximum >= 0)
 	{
 		pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, NULL);
@@ -42,29 +27,30 @@ void *droneThread(void *data)
 		/**/
 		pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
 	}
+
 	green("Fin thread drone\n");
 	pthread_exit(NULL);
 }
 
-/* fonction qui decremente le poids focus par le drone si son ancien et totalement livrer.*/
-
-int toutFini(Data* data)
+void initDrone(Drone* drone)
 {
-	/*printf("toutfini\n");*/
-	int i=0,bool=1;
-	
-	while(i < NBCOLIS && bool)
+	drone->capaciteActuel = 90;
+	drone->poidsMaximum = rand_min_max(0,100);
+	char chaine[50];
+	if(drone->poidsMaximum > 60)
 	{
-		/*printf("%d  %d\n",i,NBCOLIS);*/
-		if(data->colis[i].livrer == 0)
-		{
-			bool = 0;	
-		}
-		i++;
+		drone->poidsMaximum = 2;
 	}
-	/*printf("bool = %d",bool);
-	printf("toutfini fin\n------------------\n");*/
-	return bool;
+	else if(drone->poidsMaximum >25 )
+	{
+		drone->poidsMaximum = 1;
+	}
+	else
+	{
+		drone->poidsMaximum = 0;
+	}
+	sprintf(chaine, "\t\tpoidMax = %d\n",drone->poidsMaximum);
+	cyan(chaine);
 }
 
 int rechercheColis(Data* data,Drone* drone)
@@ -114,8 +100,7 @@ int rechercheColis(Data* data,Drone* drone)
 		i = -2;
 	else if (i == stop)
 		i = -1;
-	else
-		data->colis[i].livrer = -1;
+
 
 	pthread_mutex_unlock(&data->mutex_collis);
 
@@ -124,9 +109,27 @@ int rechercheColis(Data* data,Drone* drone)
 
 int prendreColis(Data* data, Drone* drone)
 {
-	/*printf("recharge\n");*/
-	char chaine[50];
 	int idColis;
+	attacheDock(data, drone);
+	/* utiliser recherche colis ici*/
+
+	idColis = rechercheColis(data,drone);
+	
+	if(idColis >=0)
+	{	
+		pthread_mutex_lock(&data->mutex_collis);
+			printf("idCOlis = %d\n",idColis);
+			data->colis[idColis].livrer = -1;
+		pthread_mutex_unlock(&data->mutex_collis);
+	}
+	/* mettre printf pour dire si colis prit ou non*/
+	detacheDock(data, drone);
+	return idColis;
+}
+
+void attacheDock(Data* data, Drone* drone)
+{
+	char chaine[50];
 	pthread_mutex_lock(&data->mutex_docksAppro);
 	/*printf("nb slot %d\tdrone = %ld\n", data->nbSlotRecharge, pthread_self());*/
 		while (data->nbDocksAppro <= 0)/*expliquer pq while et pas if*/
@@ -141,13 +144,11 @@ int prendreColis(Data* data, Drone* drone)
 		sprintf(chaine, "Le drone %ld se connecte au dock\n",pthread_self());
 		yellow(chaine);
 	pthread_mutex_unlock(&data->mutex_docksAppro);
+}
 
-	/* utiliser recherche colis ici*/
-
-	idColis = rechercheColis(data,drone);
-	printf("idCOlis = %d\n",idColis);
-	/* mettre printf pour dire si colis prit ou non*/
-	
+void detacheDock(Data* data, Drone* drone)
+{
+	char chaine[50];
 	pthread_mutex_lock(&data->mutex_docksAppro);
 		sprintf(chaine, "Le drone %ld se detache du dock\n",pthread_self());
 		yellow(chaine);
@@ -156,12 +157,24 @@ int prendreColis(Data* data, Drone* drone)
 		pthread_cond_signal(&data->cond_docksAppro);
 	pthread_mutex_unlock(&data->mutex_docksAppro);
 	/*printf("recharge fin\n------------------\n");*/
-	return idColis;
+	
 }
 
 void recharge(Data* data,Drone* drone)
 {
-	/*printf("recharge\n");*/
+	
+	int tempRecharge;
+	tempRecharge = attacheSlotRecharge(data, drone);
+
+	sleep(1);
+	/*sleep(tempRecharge);*/
+
+	detacheSlotRecharge(data,drone);
+	
+}
+
+int attacheSlotRecharge(Data* data, Drone* drone)
+{
 	char chaine[50];
 	pthread_mutex_lock(&data->mutex_slotRecharge);
 	/*printf("nb slot %d\tdrone = %ld\n", data->nbSlotRecharge, pthread_self());*/
@@ -176,12 +189,14 @@ void recharge(Data* data,Drone* drone)
 	
 		sprintf(chaine, "Le drone %ld se recharge\n",pthread_self());
 		yellow(chaine);
-		int tempRecharge = (CAPACITEBATTERY - drone->capaciteActuel)/1.5;
+		
 	pthread_mutex_unlock(&data->mutex_slotRecharge);
+	return ((CAPACITEBATTERY - drone->capaciteActuel)/1.5);
+}
 
-	sleep(1);
-	/*sleep(tempRecharge);*/
-
+void detacheSlotRecharge(Data* data,Drone* drone)
+{
+	char chaine[50];
 	pthread_mutex_lock(&data->mutex_slotRecharge);
 		drone->capaciteActuel = 90;
 		sprintf(chaine, "Le drone %ld a fini de se recharge\n",pthread_self());
@@ -196,10 +211,42 @@ void recharge(Data* data,Drone* drone)
 void livreColis(Data* data, int i,Drone* drone)
 {
 	/*printf("livreColis\n");*/
+	/*////////////////////////////////////danger/////////////////////////////////////////*/
 	Client* client = &data->clients[data->colis[i].idClient];
+
+	descente(data, client, drone);
+
+	int donne = donneColis(client);
+	/*printf("donne = %d\n",donne);*/
+	int temps;
+	if(donne)
+	{
+		pthread_mutex_lock(&data->mutex_collis);
+			data->colis[i].livrer = 1;
+		pthread_mutex_unlock(&data->mutex_collis);
+
+		pthread_mutex_lock(&client->mutex_client);	
+			temps = client->dist * 1;
+		pthread_mutex_unlock(&client->mutex_client);
+
+	}
+	else
+	{	
+		pthread_mutex_lock(&client->mutex_client);
+			temps = client->dist * 1.5; 
+		pthread_mutex_unlock(&client->mutex_client);
+	}
+	
+	remonte(data,client,drone,temps,i);
+
+	/*printf("livreColis fin\n------------------\n");*/
+}
+
+void descente(Data* data, Client* client, Drone* drone)
+{
 	int temps;
 	pthread_mutex_lock(&client->mutex_client);
-		if(client->couloir[0] == 1)
+		while(client->couloir[0] == 1)/* || client->dronePresent==1)*/
 		{
 			pthread_cond_wait(&client->cond_client,&client->mutex_client);
 		}
@@ -213,33 +260,24 @@ void livreColis(Data* data, int i,Drone* drone)
 	
 	pthread_mutex_lock(&client->mutex_client);
 		client->couloir[0]=0;
+		/*client->dronePresent=1;*/
 		pthread_cond_signal(&client->cond_client);
 	pthread_mutex_unlock(&client->mutex_client);
-	int donne = donneColis(client);
-	/*printf("donne = %d\n",donne);*/
-	if(donne)
-	{
 
-		data->colis[i].livrer = 1;	
-		pthread_mutex_lock(&client->mutex_client);	
-			temps = client->dist * 1;
-		pthread_mutex_unlock(&client->mutex_client);
-
-	}
-	else
-	{	
-		pthread_mutex_lock(&client->mutex_client);
-			temps = client->dist * 1.5; 
-		pthread_mutex_unlock(&client->mutex_client);
-	}
 	
+}
+
+void remonte(Data* data, Client* client, Drone* drone,int temps,int i)
+{	
 	pthread_mutex_lock(&client->mutex_client);
-		if(client->couloir[1] == 1)
+		while(client->couloir[1] == 1)
 		{
 			pthread_cond_wait(&client->cond_client,&client->mutex_client);
 		}
 		client->couloir[1] = 1;/* on descend*/
+		/*client->dronePresent=0;*/
 	pthread_mutex_unlock(&client->mutex_client);
+
 	sleep(1);
 	/*sleep(temps);*/
 	drone->capaciteActuel = drone->capaciteActuel - temps;
@@ -248,8 +286,12 @@ void livreColis(Data* data, int i,Drone* drone)
 		client->couloir[1]=0;
 		pthread_cond_signal(&client->cond_client);
 	pthread_mutex_unlock(&client->mutex_client);
-
-	/*printf("livreColis fin\n------------------\n");*/
+	
+	pthread_mutex_lock(&data->mutex_collis);
+		if(data->colis[i].livrer == -1)	
+			data->colis[i].livrer = 0;
+	pthread_mutex_unlock(&data->mutex_collis);
+	
 }
 
 int donneColis(Client *c)
