@@ -120,21 +120,6 @@ int rechercheColis(Data* data,Drone* drone)
 	pthread_mutex_unlock(&data->mutex_collis);
 
 	return i;
-
-	/*printf(" i= %d,stop = %d,livre = %d, impossible = %d, plus collis = %d\n",i,stop,data->colis[i].livrer,impossible,plusCollis);*/
-	/*if(drone->capaciteActuel == 0)
-	{
-		id = rechercheColisLeger(data);
-	}
-	if(drone->capaciteActuel == 1)
-	{
-		id = rechercheColisMoyen(data);
-	}
-	if(drone->capaciteActuel == 2)
-	{
-		id = rechercheColisLourd(data);
-	}*/
-
 }
 
 int prendreColis(Data* data, Drone* drone)
@@ -152,7 +137,7 @@ int prendreColis(Data* data, Drone* drone)
 		}
 		/*printf("\t\t\tnb slot avant -- = %d\n", data->nbSlotRecharge);*/
 		data->nbDocksAppro--;
-	
+		printf("\t\t nb DOck = %d\n",data->nbDocksAppro);
 		sprintf(chaine, "Le drone %ld se connecte au dock\n",pthread_self());
 		yellow(chaine);
 	pthread_mutex_unlock(&data->mutex_docksAppro);

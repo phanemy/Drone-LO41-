@@ -32,7 +32,7 @@ void affClient (Client c)
 
 void affColis (Colis c)
 {
-	printf("idCli : %d, poids : %d\n", c.idClient, c.poids);
+	printf("idCli : %d, poids : %d, etat : %d\n", c.idClient, c.poids, c.livrer);
 }
 
 int rand_min_max (int min, int max)

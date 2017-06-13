@@ -48,7 +48,7 @@ int main(){
 	}
 	
 	destroyTout(&data);
-
+	affData(data);
 	green("Fin de la simulation\n");
 
 	return 0;

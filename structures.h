@@ -5,7 +5,7 @@
 #define NBCLIENT 4
 #define NBDOCS 4
 #define NBSLOTS 4
-#define NBDOCKS 8
+#define NBDOCKS 2
 #define NBDRONE 10
 #define CAPACITEBATTERY 90
 
