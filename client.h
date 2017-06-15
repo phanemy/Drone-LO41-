@@ -10,4 +10,4 @@
 void *clientThread(void *data);
 void gestionClient (Client *c);
 
-#endif // CLIENT_H_INCLUDED
+#endif

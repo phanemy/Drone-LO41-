@@ -15,10 +15,9 @@
 #include "utiles.h"
 
 Data initData ();
-void livreColis (Client *c);
 void destroyTout (Data *d);
 void triColis (Data *d);
 void traitantSIGINT(int num);
 void traitantSIGTSTP (int num);
 
-#endif // ZEPPZLIN_H_INCLUDED
+#endif

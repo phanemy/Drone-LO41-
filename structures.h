@@ -12,9 +12,11 @@
 #define TAILLELEGERCOLIS 3
 #define TAILLEMOYENCOLIS 6
 
+#define TIMESCALE 0.5
+
 #include <pthread.h>
 
-typedef struct Client{
+struct Client{
 	int id;
 	int couloir[2]; /* 0 : couloir libre, 1 : couloir occupé */
 	int dist;
@@ -23,15 +25,17 @@ typedef struct Client{
 	int dronePresent;
 	pthread_mutex_t mutex_client;/* peut etre deux*/
 	pthread_cond_t cond_client;
-} Client;
+};
+typedef struct Client Client;
 
-typedef struct Colis{
+struct Colis{
 	int idClient;
 	int poids;
 	int livrer;/*0 pour non, -1 pour en cours, 1 pour livrer*/
-} Colis;
+};
+typedef struct Colis Colis;
 
-typedef struct Data{
+struct Data{
 	Colis colis[NBCOLIS];
 	Client clients[NBCLIENT];
 	pthread_mutex_t mutex_docs;
@@ -49,12 +53,14 @@ typedef struct Data{
 	int idMoyen;
 	int idLourd;
 	pthread_mutex_t mutex_collis;
-} Data;
+};
+typedef struct Data Data;
 
-typedef struct Drone{
+struct Drone{
 	int id;/*inutile*/
 	int capaciteActuel;
-	int poidsMaximum
-} Drone;
+	int poidsMaximum;
+};
+typedef struct Drone Drone;
 
-#endif // STRUCTURES_H_INCLUDED
+#endif

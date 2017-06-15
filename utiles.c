@@ -14,9 +14,6 @@ void affData (Data d)
 	{
 		affColis(d.colis[i]);
 	}
-
-	printf("\nIndex\n");
-	printf("idMoyen : %d\nidLourd : %d\n", d.idMoyen, d.idLourd);
 }
 
 void affClient (Client c)

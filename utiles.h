@@ -3,14 +3,15 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "structures.h"
 
-#define RED "\e[1;31m"
-#define BLUE "\e[1;34m"
-#define CYAN "\e[1;36m"
-#define GREEN "\e[1;32m"
-#define YELLOW "\e[1;33m"
-#define NC "\e[0m"
+#define RED "\x1B[1;31m"
+#define BLUE "\x1B[1;34m"
+#define CYAN "\x1B[1;36m"
+#define GREEN "\x1B[1;32m"
+#define YELLOW "\x1B[1;33m"
+#define NC "\x1B[0m"
 
 void affData (Data d);
 void affClient (Client c);
@@ -22,4 +23,4 @@ void cyan(char *chaine);
 void green(char *chaine);
 void yellow(char *chaine);
 
-#endif // UTILES_H_INCLUDED
+#endif

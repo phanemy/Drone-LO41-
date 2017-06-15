@@ -5,8 +5,8 @@ int controlC = 1;
 Data data;
 
 int main(){
+	int i;
 	data = initData();
-	int i, id;
 
 	signal(SIGTSTP, traitantSIGTSTP);
 
@@ -20,27 +20,12 @@ int main(){
 
 	for (i=0; i < NBDRONE; i++)
 	{	
-		printf("\ncreation drone n°%d\n\n",i);
+		printf("Initialisation du drone n°%d\n\n",i);
 		if (pthread_create (&drones[i], NULL, droneThread, &data))
 			exit(EXIT_FAILURE);
 	}
 
 	signal(SIGINT, traitantSIGINT);
-
-	/*for (i=0; i < NBCOLIS; i++)
-	{
-		sleep(1);
-		id = data.leger[i].idClient;
-		livreColis(&data.clients[id]);
-
-		sleep(1);
-		id = data.moyen[i].idClient;
-		livreColis(&data.clients[id]);
-
-		sleep(1);
-		id = data.lourd[i].idClient;
-		livreColis(&data.clients[id]);
-	}*/
 	
 	for (i=0; i < NBDRONE; i++)
 	{
@@ -65,6 +50,7 @@ Data initData()
 {
 	Data d;
 	int i, id;
+	int premierApa, fin;
 
 	srand(time(NULL));
 
@@ -77,7 +63,6 @@ Data initData()
 		d.clients[i].present = rand_min_max(0,11);
 		d.clients[i].nbColis = 0;
 		d.clients[i].dronePresent = 0;
-		/*d.clients[i].mutex_client = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;*/
 		pthread_mutex_init(&d.clients[i].mutex_client, NULL);
 		d.clients[i].cond_client = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
 	}
@@ -93,7 +78,8 @@ Data initData()
 
 	triColis(&d);
 
-	int premierApa = d.colis[0].poids, fin = 0;
+	premierApa = d.colis[0].poids;
+	fin = 0;
 	i = 1;
 	
 	d.nbDocs = NBDOCS;
@@ -123,17 +109,14 @@ Data initData()
 	if (i == NBCOLIS && d.idLourd == 0)
 		d.idLourd = NBCOLIS;
 
-	/*d.mutex_docs = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;*/
 	pthread_mutex_init(&d.mutex_docs, NULL);
 	d.cond_docs = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
 
 	d.nbSlotRecharge = NBSLOTS;
-	/*d.mutex_slotRecharge = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;*/
 	pthread_mutex_init(&d.mutex_slotRecharge, NULL);
 	d.cond_slotRecharge = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
 
 	d.nbDocksAppro = NBDOCKS;
-	/*d.mutex_slotRecharge = (pthread_mutex_t) PTHREAD_MUTEX_INITIALIZER;*/
 	pthread_mutex_init(&d.mutex_docksAppro, NULL);
 	d.cond_docksAppro = (pthread_cond_t) PTHREAD_COND_INITIALIZER;
 
@@ -192,7 +175,6 @@ void traitantSIGINT(int num){
 	if (controlC)
 	{
 		int i;
-
 		if (num != SIGINT)
 			fprintf(stderr, "Probleme sur SigInt\n");
 
@@ -214,8 +196,6 @@ void traitantSIGINT(int num){
 
 void traitantSIGTSTP (int num)
 {
-	int i;
-
 	if (num != SIGTSTP)
 		fprintf(stderr, "Probleme sur SigTstp\n");
 
