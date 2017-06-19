@@ -96,13 +96,12 @@ int rechercheColis(Data* data,Drone* drone)
 			i++;
 	}
 
+	pthread_mutex_unlock(&data->mutex_collis);
+
 	if (plusCollis)
 		i = -2;
 	else if (i == stop)
 		i = -1;
-
-
-	pthread_mutex_unlock(&data->mutex_collis);
 
 	return i;
 }
@@ -212,10 +211,11 @@ void livreColis(Data* data, int i,Drone* drone)
 	/*printf("livreColis\n");*/
 	/*////////////////////////////////////danger/////////////////////////////////////////*/
 	Client* client = &data->clients[data->colis[i].idClient];
-	int donne = donneColis(client);
-	int temps;
+	int temps, donne;
 
 	descente(client, drone);
+
+	donne = donneColis(client);
 
 	if(donne)
 	{
@@ -251,7 +251,8 @@ void descente(Client* client, Drone* drone)
 		client->couloir[0] = 1;/* on descend*/
 		temps = client->dist *  0.5;
 	pthread_mutex_unlock(&client->mutex_client);
-	
+
+	printf("Sleep descente : %f\n", temps * TIMESCALE);
 	sleep(temps * TIMESCALE);
 	drone->capaciteActuel = drone->capaciteActuel - temps;
 }
@@ -324,5 +325,4 @@ int donneColis(Client *c)
 		/*printf("donneColis fin\n------------------\n");*/
 		return 1;
 	}
-
 }
