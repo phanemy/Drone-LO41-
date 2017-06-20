@@ -10,17 +10,18 @@
 #include "utiles.h"
 
 void *droneThread(void *data);
-void initDrone(Drone* drone);
+void initDrone(Drone* drone, Data* data);
 int rechercheColis(Data* data,Drone* drone);
 int prendreColis(Data* data, Drone* drone);
-void attacheDock(Data* data);
-void detacheDock(Data* data);
+void attacheDock(Data* data, Drone* drone);
+void detacheDock(Data* data, Drone* drone);
 void recharge(Data* data,Drone* drone);
 int attacheSlotRecharge(Data* data, Drone* drone);
 void detacheSlotRecharge(Data* data,Drone* drone);
 void livreColis(Data* data, int i,Drone* drone);
-void descente(Client* client, Drone* drone);
+void descente(Client* client, Data* data, Drone* drone);
 void remonte(Data* data, Client* client, Drone* drone,int temps,int i);
-int donneColis(Client *c);
+int donneColis(Client *c, Data* d, Drone* drone);
+void afficherInfo(Data *d, char *chaine, int index, int nbDrone, char color);
 
 #endif

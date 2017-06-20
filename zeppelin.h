@@ -14,7 +14,7 @@
 #include "structures.h"
 #include "utiles.h"
 
-Data initData ();
+Data initData();
 void destroyTout (Data *d);
 void triColis (Data *d);
 void traitantSIGINT(int num);

@@ -1,18 +1,15 @@
 #ifndef STRUCTURES_H_INCLUDED
 #define STRUCTURES_H_INCLUDED
 
-#define NBCOLIS 30
-#define NBCLIENT 4
 #define NBDOCS 4
 #define NBSLOTS 4
 #define NBDOCKS 2
-#define NBDRONE 10
 #define CAPACITEBATTERY 90
 
 #define TAILLELEGERCOLIS 3
 #define TAILLEMOYENCOLIS 6
 
-#define TIMESCALE 0.5
+#define TIMESCALE 0.25
 
 #include <pthread.h>
 
@@ -36,11 +33,16 @@ struct Colis{
 typedef struct Colis Colis;
 
 struct Data{
-	Colis colis[NBCOLIS];
-	Client clients[NBCLIENT];
+	Colis *colis;
+	Client *clients;
 	pthread_mutex_t mutex_docs;
 	pthread_cond_t cond_docs;
 	int nbDocs;
+	int nbColisTot;
+	int nbClientsTot;
+	
+	int nbDronesTot; /*utile pour l'affichage*/
+	int numDrone;
 
 	int nbSlotRecharge;
 	pthread_mutex_t mutex_slotRecharge;
@@ -53,11 +55,13 @@ struct Data{
 	int idMoyen;
 	int idLourd;
 	pthread_mutex_t mutex_collis;
+
+	pthread_mutex_t mutex_affichage;
 };
 typedef struct Data Data;
 
 struct Drone{
-	int id;/*inutile*/
+	int id;
 	int capaciteActuel;
 	int poidsMaximum;
 };

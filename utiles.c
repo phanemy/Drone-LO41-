@@ -4,13 +4,13 @@ void affData (Data d)
 {
 	int i;
 	printf("-----------Data-----------\n");
-	for (i=0; i < NBCLIENT; i++)
+	for (i=0; i < d.nbClientsTot; i++)
 	{
 		affClient(d.clients[i]);
 	}
 	
 	printf("\nColis\n");
-	for (i=0; i < NBCOLIS; i++)
+	for (i=0; i < d.nbColisTot; i++)
 	{
 		affColis(d.colis[i]);
 	}
@@ -46,6 +46,114 @@ void affColis (Colis c)
 		strcat(chaine, "En cours\n");
 		yellow(chaine);
 	}
+}
+
+void afficherTableau(char *chaine, int index, int largeur, char color)
+{
+	int i, j, taille;
+	for (i=0; i < largeur; i++)
+	{
+		if (i == index)
+		{
+			taille = (ESPACEMENTTAB * 8 - strlen(chaine) + 6)/ 8;
+			printf("|");
+			afficherEnFonctionCouleur(chaine, color);
+			for (j=0; j < taille; j++)
+			{
+				printf("\t");
+			}
+		}
+		else
+		{
+			printf("|");
+			for(j=0; j < ESPACEMENTTAB; j++)
+			{
+				printf("\t");
+			}
+		}
+	}
+	printf("|\n");
+}
+
+void afficherEnFonctionCouleur(char *chaine, char color)
+{
+	if (color == 'r')
+		red(chaine);
+	else if (color == 'b')
+		blue(chaine);
+	else if (color == 'g')
+		green(chaine);
+	else if (color == 'y')
+		yellow(chaine);
+	else if (color == 'c')
+		cyan(chaine);
+	else
+		printf("%s", chaine);
+}
+
+/*void afficherEntete(int nb, ...)
+{
+	int i = 0, taille, j;
+	char chaine[50];
+	va_list ap;
+
+	for (i=0; i <  nb * ESPACEMENTTAB * 8; i++)
+	{
+		printf("-");
+	}
+	printf("\n");
+	
+	i = 0;
+
+	va_start(ap, nb);
+	while(i < nb)
+	{
+		strcpy(chaine, va_arg(ap, char *));
+		taille = (ESPACEMENTTAB * 8 - strlen(chaine) + 6) / 8;
+		printf("|%s", chaine);
+		for (j=0; j < taille; j++)
+		{
+			printf("\t");
+		}
+		i++;
+	}
+	va_end(ap);
+	printf("|\n");
+	for (i=0; i < nb * ESPACEMENTTAB * 8; i++)
+	{
+		printf("-");
+	}
+	printf("\n");
+}*/
+
+void afficherEntete(int nbDrone)
+{
+	char chaine[50];
+	int i, j, taille;
+	
+	for (i=0; i <  nbDrone * ESPACEMENTTAB * 8; i++)
+	{
+		printf("-");
+	}
+	printf("\n");
+
+	for(i=0; i < nbDrone; i++)
+	{
+		sprintf(chaine, "Drone %d", i);
+		taille = (ESPACEMENTTAB * 8 - strlen(chaine) + 6) / 8;
+		printf("|%s", chaine);
+		for (j=0; j < taille; j++)
+		{
+			printf("\t");
+		}
+	}
+	printf("|\n");
+
+	for (i=0; i <  nbDrone * ESPACEMENTTAB * 8; i++)
+	{
+		printf("-");
+	}
+	printf("\n");
 }
 
 int rand_min_max (int min, int max)
