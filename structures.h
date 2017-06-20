@@ -1,7 +1,6 @@
 #ifndef STRUCTURES_H_INCLUDED
 #define STRUCTURES_H_INCLUDED
 
-#define NBDOCS 4
 #define NBSLOTS 4
 #define NBDOCKS 2
 #define CAPACITEBATTERY 90
@@ -37,7 +36,6 @@ struct Data{
 	Client *clients;
 	pthread_mutex_t mutex_docs;
 	pthread_cond_t cond_docs;
-	int nbDocs;
 	int nbColisTot;
 	int nbClientsTot;
 	

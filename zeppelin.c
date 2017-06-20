@@ -120,7 +120,6 @@ Data initData()
 	fin = 0;
 	i = 1;
 	
-	d.nbDocs = NBDOCS;
 	d.idMoyen = 0;
 	d.idLourd = 0;
 
