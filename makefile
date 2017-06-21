@@ -5,7 +5,7 @@ EXEC=zeppelin
 SRC= $(wildcard *.c)
 OBJ= $(SRC:.c=.o)
 
-all: clean $(EXEC)
+all: $(EXEC)
 
 zeppelin: $(OBJ)
 	$(CC) -o $@ $^ $(LDFLAGS)

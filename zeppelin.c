@@ -41,7 +41,6 @@ int main(int argc, char *argv[]){
 
 	for (i=0; i < nbDrones; i++)
 	{	
-		/*printf("Initialisation du drone n°%d\n\n",i);*/
 		if (pthread_create (&drones[i], NULL, droneThread, &data))
 			exit(EXIT_FAILURE);
 	}
@@ -65,11 +64,6 @@ int main(int argc, char *argv[]){
 	free(clients);
 
 	green("Fin de la simulation\n");
-
-	/*afficherEntete(3, "drone 1", "drone 2", "drone 3");
-	afficherTableau("pour 0", 0, 3, 'c');
-	afficherTableau("un truc beaucoup plus long", 1, 3, 'y');
-	afficherTableau("pour 2", 2, 3, 'w');*/
 
 	return 0;
 }

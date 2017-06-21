@@ -20,10 +20,9 @@ void affData (Data d);
 void affClient (Client c);
 void affColis (Colis c);
 void afficherTableau(char *chaine, int index, int largeur, char color);
-/*void afficherEntete(int nb, ...);*/
 void afficherEntete(int nbDrone);
 void afficherEnFonctionCouleur(char *chaine, char color);
-int rand_min_max (int min, int max); /*min inclus et max exclus*/
+int rand_min_max (int min, int max);
 void red(char *chaine);
 void blue(char *chaine);
 void cyan(char *chaine);

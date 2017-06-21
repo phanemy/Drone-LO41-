@@ -91,40 +91,6 @@ void afficherEnFonctionCouleur(char *chaine, char color)
 		printf("%s", chaine);
 }
 
-/*void afficherEntete(int nb, ...)
-{
-	int i = 0, taille, j;
-	char chaine[50];
-	va_list ap;
-
-	for (i=0; i <  nb * ESPACEMENTTAB * 8; i++)
-	{
-		printf("-");
-	}
-	printf("\n");
-	
-	i = 0;
-
-	va_start(ap, nb);
-	while(i < nb)
-	{
-		strcpy(chaine, va_arg(ap, char *));
-		taille = (ESPACEMENTTAB * 8 - strlen(chaine) + 6) / 8;
-		printf("|%s", chaine);
-		for (j=0; j < taille; j++)
-		{
-			printf("\t");
-		}
-		i++;
-	}
-	va_end(ap);
-	printf("|\n");
-	for (i=0; i < nb * ESPACEMENTTAB * 8; i++)
-	{
-		printf("-");
-	}
-	printf("\n");
-}*/
 
 void afficherEntete(int nbDrone)
 {

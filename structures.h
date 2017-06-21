@@ -19,7 +19,7 @@ struct Client{
 	int present;
 	int nbColis;
 	int dronePresent;
-	pthread_mutex_t mutex_client;/* peut etre deux*/
+	pthread_mutex_t mutex_client;
 	pthread_cond_t cond_client;
 };
 typedef struct Client Client;
@@ -39,7 +39,7 @@ struct Data{
 	int nbColisTot;
 	int nbClientsTot;
 	
-	int nbDronesTot; /*utile pour l'affichage*/
+	int nbDronesTot;
 	int numDrone;
 
 	int nbSlotRecharge;
