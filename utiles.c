@@ -1,5 +1,6 @@
 #include "utiles.h"
 
+/*fonction affichant les donnée client et colis*/
 void affData (Data d)
 {
 	int i;
@@ -48,6 +49,7 @@ void affColis (Colis c)
 	}
 }
 
+/*permet d'afficher le deroulement des actions des drones*/
 void afficherTableau(char *chaine, int index, int largeur, char color)
 {
 	int i, j, taille;
@@ -91,7 +93,7 @@ void afficherEnFonctionCouleur(char *chaine, char color)
 		printf("%s", chaine);
 }
 
-
+/*affiche l'entete du tableaux*/
 void afficherEntete(int nbDrone)
 {
 	char chaine[50];

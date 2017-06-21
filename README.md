@@ -5,6 +5,11 @@ make pour compiler le projet.
 
 Pour le lancer le programme avec les valeurs par defauts, utiliser ./zeppelin
 
+### Signaux :
+Le processus peut être intérompu avec l'envoi d'un signal SIGINT (control+C). Il attendra que tous les drônes soient revenu dans le zeppelin pour se terminer.
+
+Le signal SIGTSTP (control+Z) permet de mettre en pause le processus et d'afficher les valeurs de data à ce moment. Pour reprendre le processus, taper la commande fg.
+
 ### Option :
 Certaines valeurs peuvent être passées en paramètres :
 - Le premier paramètre est le nombre de drônes

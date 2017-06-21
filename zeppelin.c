@@ -6,7 +6,7 @@ Data data;
 
 int main(int argc, char *argv[]){
 	int i;
-
+	/*on initialise les données*/
 	if (argc > 1)
 	{
 		nbDrones = atoi(argv[1]);
@@ -26,13 +26,17 @@ int main(int argc, char *argv[]){
 	clients = malloc(sizeof(pthread_t) * nbClients);
 	
 	data = initData();
-
-	signal(SIGTSTP, traitantSIGTSTP);
+	
 
 	affData(data);
 
 	afficherEntete(nbDrones);
-
+	
+	/*on defini les actions a faire sur les signaux*/
+	signal(SIGTSTP, traitantSIGTSTP);
+	signal(SIGINT, traitantSIGINT);
+	
+	/*on lance les threads*/
 	for (i=0; i < nbClients; i++)
 	{
 		if (pthread_create (&clients[i], NULL, clientThread, &data.clients[i]))
@@ -44,9 +48,10 @@ int main(int argc, char *argv[]){
 		if (pthread_create (&drones[i], NULL, droneThread, &data))
 			exit(EXIT_FAILURE);
 	}
-
-	signal(SIGINT, traitantSIGINT);
 	
+	
+	
+	/*on attend qu'ils soit tous fini pour s'arreter*/
 	for (i=0; i < nbDrones; i++)
 	{
 		pthread_join (drones[i], NULL);
@@ -58,6 +63,7 @@ int main(int argc, char *argv[]){
 
 	affData(data);
 	
+	/*on detruit tout les objet posix et data créer*/
 	destroyTout(&data);
 
 	free(drones);
@@ -68,7 +74,7 @@ int main(int argc, char *argv[]){
 	return 0;
 }
 
-
+/*fonction initalisant toute les donnée en fonction de parametre de lancement et des define*/
 Data initData()
 {
 	Data d;
@@ -156,6 +162,7 @@ Data initData()
 	return d;
 }
 
+/*fonction liberant tout les object créer( mutex, cond)*/
 void destroyTout (Data *d)
 {
 	int i;
@@ -184,6 +191,7 @@ void destroyTout (Data *d)
 	free(d->colis);
 }
 
+/*fonction triant les colis par poids croissant*/
 void triColis (Data *d)
 {
 	int i = 0, j, changement;
@@ -205,6 +213,9 @@ void triColis (Data *d)
 	}while (changement && i < nbColisTotal);
 }
 
+/*fonction definissant l'action a realiser en cas de CTRL+C:
+On arrete tous les threds se qui permet au programme de se finir
+normalement en supprimant les objets créer*/
 void traitantSIGINT(int num){
 	if (controlC)
 	{
@@ -226,6 +237,8 @@ void traitantSIGINT(int num){
 	}
 }
 
+/*fonction definissant l'action a realiser en cas de CTRL+Z:
+mets en pause la simulation et affiche les data*/
 void traitantSIGTSTP (int num)
 {
 	if (num != SIGTSTP)

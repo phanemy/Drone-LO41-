@@ -2,15 +2,18 @@
 
 void *clientThread(void *data)
 {
+	/*Initialisation des client*/
 	Client *c = (Client*) data;
 
 	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
 	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
-		
+	
 	gestionClient(c);
 	pthread_exit(NULL);
 }
 
+/*fonction qui mets a jour l'état du client et verifie si 
+tous ses colis ont ete livrer*/
 void gestionClient (Client *c)
 {
 	while (c->nbColis > 0)
