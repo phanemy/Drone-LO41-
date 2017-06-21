@@ -1,5 +1,5 @@
 # Drone-LO41
-Projet de LO41, simulation de livraison par drone.
+Projet de LO41, simulation de livraison par drone. Réaliser par Bastien Luchier et Guillaume Vanson.
 
 make pour compiler le projet.
 
